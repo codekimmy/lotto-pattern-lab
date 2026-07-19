@@ -535,6 +535,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   color:var(--text);
   font-size:9px;
 }
+.bonus-exclusion{color:#ffcf70;font-weight:800}
 .follow-common{
   color:#ffd27c;
   font-weight:800;
@@ -635,8 +636,8 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   }
   #follow3 tr[data-follow3] td:first-child::before{display:none}
   #follow3 tr[data-follow3] td:nth-child(2)::before{content:"과거 일치"}
-  #follow3 tr[data-follow3] td:nth-child(3)::before{content:"반복 후속"}
-  #follow3 tr[data-follow3] td:nth-child(4)::before{content:"완전 공통"}
+  #follow3 tr[data-follow3] td:nth-child(3)::before{content:"후속률 상위"}
+  #follow3 tr[data-follow3] td:nth-child(4)::before{content:"모델 기여"}
   #follow3 tr[data-follow3] td:nth-child(5)::before{content:"최근 일치"}
   #follow3 tbody tr:not([data-follow3]){
     display:block;
@@ -650,12 +651,12 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
 }
 
 
-.all35-grid{
+.all20-grid{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
   gap:8px;
 }
-.all35-chip{
+.all20-chip{
   padding:9px 8px;
   border:1px solid var(--line);
   border-radius:9px;
@@ -665,22 +666,22 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   font-size:11px;
   font-weight:700;
 }
-.all35-chip.has-match{
+.all20-chip.has-match{
   border-color:rgba(86,182,194,.55);
 }
-.all35-chip.has-common{
+.all20-chip.has-common{
   border-color:rgba(240,179,90,.75);
   color:#ffd27c;
 }
 @media(max-width:1050px){
-  .all35-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .all20-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media(max-width:820px){
-  .all35-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .all35-chip{padding:8px 5px;font-size:10px}
+  .all20-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .all20-chip{padding:8px 5px;font-size:10px}
 }
 @media(max-width:360px){
-  .all35-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .all20-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 
@@ -736,18 +737,33 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   }
 }
 
+
+/* ===== Improved score model ===== */
+.model-comparison{margin:15px 0}
+.model-comparison-title{margin:0 0 9px;font-size:13px;font-weight:800}
+.model-table{min-width:720px}
+.model-table tr.selected-model{background:rgba(240,179,90,.10)}
+.model-table tr.selected-model td:first-child{color:#ffd27c;font-weight:800}
+.model-pass{color:#7ee2a6;font-weight:800}
+.model-fail{color:#ff91b8;font-weight:700}
+.model-neutral{color:var(--muted)}
+.score-pill{display:inline-block;padding:3px 6px;border-radius:999px;background:rgba(240,179,90,.14);color:#ffd27c;font-size:9px;font-weight:800}
+.follow-score{color:#ffd27c;font-weight:800}
+.confidence-note{display:inline-block;margin-top:5px;color:var(--muted);font-size:10px}
+@media(max-width:820px){.model-table{min-width:650px}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">LOTTO PATTERN LAB</div>
-    <div class="version">v0.6 · 순차 백테스트</div>
+    <div class="version">v0.8 · 개선형 점수 모델</div>
     <nav class="nav">
       <button class="active" data-view="dashboard"><span class="nav-icon">▦</span><span class="nav-full">전체 현황</span><span class="nav-short">홈</span></button>
       <button data-view="ending"><span class="nav-icon">◉</span><span class="nav-full">개별 끝수</span><span class="nav-short">끝수</span></button>
       <button data-view="composite"><span class="nav-icon">⌘</span><span class="nav-full">복합 끝수</span><span class="nav-short">복합</span></button>
-      <button data-view="follow3"><span class="nav-icon">△</span><span class="nav-full">35조합 후속 추적</span><span class="nav-short">35조합</span></button>
+      <button data-view="follow3"><span class="nav-icon">△</span><span class="nav-full">20조합 점수 예측</span><span class="nav-short">점수</span></button>
       <button data-view="draws"><span class="nav-icon">≡</span><span class="nav-full">회차 탐색</span><span class="nav-short">회차</span></button>
       <button data-view="ideas"><span class="nav-icon">＋</span><span class="nav-full">분석 아이디어</span><span class="nav-short">아이디어</span></button>
     </nav>
@@ -895,16 +911,16 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
 
     <section id="follow3" class="view">
       <div class="panel">
-        <h2>최신 7수 · 전체 35개 조합 후속 추적</h2>
+        <h2>최신 본번호 6수 · 전체 20개 조합 점수 분석</h2>
         <div class="desc">
-          최신 회차의 본번호 6개와 보너스 번호를 합친 7수에서 중복 없는 3수 조합 전체 35개를 빠짐없이 생성합니다.
-          과거 회차도 본번호와 보너스를 합친 7수로 비교하고, 일치 회차의 직후 회차 본번호 6개를 분석합니다.
+          최신 회차의 본번호 6개에서 중복 없는 3수 조합 전체 20개를 빠짐없이 생성합니다.
+          <span class="bonus-exclusion">보너스 번호는 전 과정에서 제외합니다.</span> 20개 조합별 후속 출현률, 과거 표본 수, 최근 일치 가중치, 여러 조합의 지지 수를 합산해 번호별 점수를 계산합니다.
         </div>
 
         <div class="follow-latest">
           <div>
             <div class="follow-latest-title" id="followLatestTitle"></div>
-            <div class="mini">본번호 6개 + 보너스 1개</div>
+            <div class="mini">본번호 6개 · 보너스 번호 제외</div>
           </div>
           <div class="nums follow-latest-balls" id="followLatestBalls"></div>
         </div>
@@ -914,11 +930,11 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
 
 
       <div class="panel">
-        <h2>전체 35개 조합 목록</h2>
+        <h2>전체 20개 조합 목록</h2>
         <div class="desc">
-          7개 번호에서 3개를 고르는 조합은 총 35개입니다. 아래 35개가 분석 기준 전체이며 어떤 조합도 생략하지 않습니다.
+          본번호 6개에서 3개를 고르는 조합은 총 20개입니다. 아래 20개가 분석 기준 전체이며 어떤 조합도 생략하지 않습니다. 보너스 번호는 제외합니다.
         </div>
-        <div class="all35-grid" id="all35Grid"></div>
+        <div class="all20-grid" id="all20Grid"></div>
       </div>
 
       <div class="panel prediction-panel">
@@ -929,40 +945,54 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
       </div>
 
       <div class="panel backtest-panel">
-        <h2>과거 순차 검증</h2>
+        <h2>개선안 비교 · 순차 검증</h2>
         <div class="desc">
-          각 목표 회차를 예측할 때 그 직전 회차까지의 데이터만 사용합니다.
-          목표 회차 이후의 당첨번호는 계산에 넣지 않는 워크포워드 방식입니다.
+          각 목표 회차에서 그 직전 회차까지의 본번호 6개만 사용합니다.
+          표본 기준 2·3·4회와 최소 후속률 20·25·30%의 9개 설정을 비교하고,
+          중간 검증 구간에서 고른 모델을 마지막 20% 구간에서 다시 시험합니다. 보너스 번호는 제외합니다.
         </div>
 
         <div class="cards" id="followBacktestKpis"></div>
 
         <div class="backtest-bars" id="followBacktestBars"></div>
 
+        <div class="model-comparison">
+          <div class="model-comparison-title">9개 설정 검증 결과</div>
+          <div class="table-wrap">
+            <table class="model-table">
+              <thead><tr>
+                <th>설정</th><th>검증 적중률</th><th>최종시험 적중률</th>
+                <th>최종 커버리지</th><th>판정</th>
+              </tr></thead>
+              <tbody id="followModelBody"></tbody>
+            </table>
+          </div>
+        </div>
+
         <div class="notice" id="followBacktestComment"></div>
       </div>
 
       <div class="panel">
-        <h2>예측번호 근거</h2>
-        <div class="desc">각 번호가 어떤 최신 3수 조합의 후속 교집합에서 선택됐는지 보여줍니다.</div>
+        <h2>번호별 점수 근거</h2>
+        <div class="desc">각 번호의 종합 점수, 지지 조합 수, 평균 후속률과 기여한 3수 조합을 보여줍니다.</div>
         <div class="follow-evidence-grid" id="followEvidenceGrid"></div>
       </div>
 
       <div class="panel">
-        <h2>7수에서 생성한 전체 35개 조합</h2>
+        <h2>본번호 6수에서 생성한 전체 20개 조합</h2>
         <div class="desc">
-          35개 조합을 모두 나열하며, ‘완전 공통’은 해당 조합의 과거 일치 회차가 2회 이상이고 각 직후 회차 본번호에 매번 나온 번호입니다.
-          행을 누르면 일치 회차 → 직후 회차를 확인할 수 있습니다.
+          20개 조합을 모두 나열하며, 선택된 모델의 최소 표본과 후속률 기준을 통과한 번호를 표시합니다.
+          행을 누르면 과거 일치 회차 → 직후 회차를 확인할 수 있습니다. 보너스 번호는 제외합니다.
         </div>
         <div class="controls">
           <select id="follow3Status">
-            <option value="all">전체 35개 조합</option>
-            <option value="common">완전 공통 있음</option>
+            <option value="all">전체 20개 조합</option>
+            <option value="common">모델 기여 있음</option>
             <option value="repeat">반복 후속 있음</option>
-            <option value="none">공통 없음</option>
+            <option value="none">모델 기여 없음</option>
           </select>
           <select id="follow3Sort">
-            <option value="common">공통 신호 우선</option>
+            <option value="common">모델 점수 우선</option>
             <option value="matches">일치 회차 많은 순</option>
             <option value="numbers">번호 오름차순</option>
           </select>
@@ -972,8 +1002,8 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>7수 기반 전체 3수 조합</th><th>과거 일치</th><th>반복 후속 번호</th>
-              <th>완전 공통</th><th>최근 일치 회차</th>
+              <th>본번호 6수 기반 전체 3수 조합</th><th>과거 일치</th><th>후속률 상위</th>
+              <th>모델 기여 번호</th><th>최근 일치 회차</th>
             </tr></thead>
             <tbody id="follow3Body"></tbody>
           </table>
@@ -1052,7 +1082,7 @@ let state = {
 };
 
 const IDEAS = [
-  ["35조합 후속 추적","최신 7수에서 가능한 모든 35개 삼중조합과 과거 직후 회차 교집합","구현"],
+  ["20조합 점수 예측","후속률·표본 신뢰도·최근성·조합 지지를 합친 점수 모델","구현"],
   ["홀짝 패턴","0:6부터 6:0까지 구성, 빈도, 최근 공백","후속"],
   ["저·고 구간","1~22와 23~45의 비율 및 정확 조합","후속"],
   ["10번대 분포","1~9·10~19·20~29·30~39·40~45 구성","후속"],
@@ -1207,16 +1237,28 @@ function chooseExact(arr,size){
 }
 
 
-function follow3Key(triplet){
-  return triplet.join(",");
-}
+
+const FOLLOW3_BASE_RATE=6/45;
+const FOLLOW3_HALF_LIFE=100;
+const FOLLOW3_CONFIGS=[
+  {id:"m2-r20",minSample:2,minRate:.20,label:"표본2 · 후속률20%"},
+  {id:"m2-r25",minSample:2,minRate:.25,label:"표본2 · 후속률25%"},
+  {id:"m2-r30",minSample:2,minRate:.30,label:"표본2 · 후속률30%"},
+  {id:"m3-r20",minSample:3,minRate:.20,label:"표본3 · 후속률20%"},
+  {id:"m3-r25",minSample:3,minRate:.25,label:"표본3 · 후속률25%"},
+  {id:"m3-r30",minSample:3,minRate:.30,label:"표본3 · 후속률30%"},
+  {id:"m4-r20",minSample:4,minRate:.20,label:"표본4 · 후속률20%"},
+  {id:"m4-r25",minSample:4,minRate:.25,label:"표본4 · 후속률25%"},
+  {id:"m4-r30",minSample:4,minRate:.30,label:"표본4 · 후속률30%"}
+];
+
+function follow3Key(triplet){return triplet.join(",");}
 
 function hypergeomProbability(predictedCount,hitCount){
-  if(hitCount<0 || hitCount>Math.min(6,predictedCount))return 0;
+  if(hitCount<0||hitCount>Math.min(6,predictedCount))return 0;
   if(predictedCount-hitCount>39)return 0;
   return nCr(6,hitCount)*nCr(39,predictedCount-hitCount)/nCr(45,predictedCount);
 }
-
 function hypergeomAtLeast(predictedCount,minimumHits){
   let total=0;
   for(let hits=minimumHits;hits<=Math.min(6,predictedCount);hits++){
@@ -1225,15 +1267,99 @@ function hypergeomAtLeast(predictedCount,minimumHits){
   return total;
 }
 
+function follow3TripletStats(ordered,referenceIndex,triplets,occurrences){
+  const ln2=Math.log(2);
+  return triplets.map(triplet=>{
+    const matches=occurrences.get(follow3Key(triplet))||[];
+    const counts=new Map();
+    const weightedCounts=new Map();
+    let weightSum=0;
+    matches.forEach(sourceIndex=>{
+      const age=referenceIndex-sourceIndex;
+      const weight=Math.exp(-ln2*age/FOLLOW3_HALF_LIFE);
+      weightSum+=weight;
+      ordered[sourceIndex+1].nums.forEach(number=>{
+        counts.set(number,(counts.get(number)||0)+1);
+        weightedCounts.set(number,(weightedCounts.get(number)||0)+weight);
+      });
+    });
+    return {triplet,matches,counts,weightedCounts,weightSum};
+  });
+}
+
+function scoreFollow3Stats(stats,config){
+  const scores=new Map(),supports=new Map(),rateSums=new Map(),detailMap=new Map();
+
+  stats.forEach(stat=>{
+    const sampleCount=stat.matches.length;
+    if(sampleCount<config.minSample||!stat.weightSum)return;
+    const reliability=Math.sqrt(sampleCount);
+    const numbers=new Set([...stat.counts.keys(),...stat.weightedCounts.keys()]);
+
+    numbers.forEach(number=>{
+      const rawRate=(stat.counts.get(number)||0)/sampleCount;
+      const recentRate=(stat.weightedCounts.get(number)||0)/stat.weightSum;
+      const blendedRate=.35*rawRate+.65*recentRate;
+      if(blendedRate<config.minRate||blendedRate<=FOLLOW3_BASE_RATE)return;
+
+      const contribution=(blendedRate-FOLLOW3_BASE_RATE)*reliability;
+      scores.set(number,(scores.get(number)||0)+contribution);
+      supports.set(number,(supports.get(number)||0)+1);
+      rateSums.set(number,(rateSums.get(number)||0)+blendedRate);
+
+      if(!detailMap.has(number))detailMap.set(number,[]);
+      detailMap.get(number).push({triplet:stat.triplet,sampleCount,rawRate,recentRate,blendedRate,contribution});
+    });
+  });
+
+  const ranked=[...scores.keys()].map(number=>{
+    const support=supports.get(number)||0;
+    const averageRate=rateSums.get(number)/support;
+    const score=(scores.get(number)||0)+.08*Math.log1p(support)+.05*averageRate;
+    return {number,score,support,averageRate,details:(detailMap.get(number)||[]).sort((a,b)=>b.contribution-a.contribution)};
+  }).sort((a,b)=>b.score-a.score||b.support-a.support||b.averageRate-a.averageRate||a.number-b.number);
+
+  return {candidatePool:ranked,prediction:ranked.slice(0,6).sort((a,b)=>a.number-b.number)};
+}
+
+function summarizeFollow3Segment(items,start,end){
+  const segment=items.slice(start,end);
+  const predicted=segment.filter(item=>item.predictedCount>0);
+  const totalPredictedNumbers=predicted.reduce((sum,item)=>sum+item.predictedCount,0);
+  const totalHits=predicted.reduce((sum,item)=>sum+item.hitCount,0);
+  const predictionRounds=predicted.length;
+  const ratio=minimum=>predictionRounds?predicted.filter(item=>item.hitCount>=minimum).length/predictionRounds:0;
+  const randomRatio=minimum=>predictionRounds?predicted.reduce((sum,item)=>sum+hypergeomAtLeast(item.predictedCount,minimum),0)/predictionRounds:0;
+
+  return {
+    totalTargets:segment.length,predictionRounds,noSignalRounds:segment.length-predictionRounds,
+    coverage:segment.length?predictionRounds/segment.length:0,totalPredictedNumbers,totalHits,
+    numberHitRate:totalPredictedNumbers?totalHits/totalPredictedNumbers:0,
+    randomNumberHitRate:FOLLOW3_BASE_RATE,
+    excessHits:totalHits-totalPredictedNumbers*FOLLOW3_BASE_RATE,
+    atLeast1:ratio(1),atLeast2:ratio(2),atLeast3:ratio(3),
+    randomAtLeast1:randomRatio(1),randomAtLeast2:randomRatio(2),randomAtLeast3:randomRatio(3),
+    hitDistribution:[0,1,2,3,4,5,6].map(hitCount=>({hitCount,count:predicted.filter(item=>item.hitCount===hitCount).length}))
+  };
+}
+
+function wilsonInterval(successes,total,z=1.95996398454){
+  if(!total)return {low:0,high:0};
+  const p=successes/total;
+  const denom=1+z*z/total;
+  const center=(p+z*z/(2*total))/denom;
+  const half=z*Math.sqrt(p*(1-p)/total+z*z/(4*total*total))/denom;
+  return {low:Math.max(0,center-half),high:Math.min(1,center+half)};
+}
+
 function analyzeFollow3Backtest(rows){
   const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
   const occurrences=new Map();
-  const evaluations=[];
+  const evaluations=new Map(FOLLOW3_CONFIGS.map(config=>[config.id,[]]));
+  const baselineEvaluations=[];
 
   function addSourceDraw(sourceIndex){
-    const source=ordered[sourceIndex];
-    const seven=[...new Set([...source.nums.map(Number),Number(source.bonus)])].sort((a,b)=>a-b);
-    chooseExact(seven,3).forEach(triplet=>{
+    chooseExact(ordered[sourceIndex].nums.map(Number).sort((a,b)=>a-b),3).forEach(triplet=>{
       const key=follow3Key(triplet);
       if(!occurrences.has(key))occurrences.set(key,[]);
       occurrences.get(key).push(sourceIndex);
@@ -1242,206 +1368,140 @@ function analyzeFollow3Backtest(rows){
 
   for(let targetIndex=1;targetIndex<ordered.length;targetIndex++){
     const referenceIndex=targetIndex-1;
-    const reference=ordered[referenceIndex];
-    const target=ordered[targetIndex];
-    const referenceSeven=[...new Set([...reference.nums.map(Number),Number(reference.bonus)])].sort((a,b)=>a-b);
-    const triplets=chooseExact(referenceSeven,3);
+    const targetSet=new Set(ordered[targetIndex].nums.map(Number));
+    const referenceSix=ordered[referenceIndex].nums.map(Number).sort((a,b)=>a-b);
+    const triplets=chooseExact(referenceSix,3);
+    const stats=follow3TripletStats(ordered,referenceIndex,triplets,occurrences);
 
-    const candidateSupport=new Map();
-    const uniqueTransitions=new Set();
+    FOLLOW3_CONFIGS.forEach(config=>{
+      const scored=scoreFollow3Stats(stats,config);
+      const prediction=scored.prediction.map(item=>item.number);
+      const hits=prediction.filter(number=>targetSet.has(number));
+      evaluations.get(config.id).push({predictedCount:prediction.length,hitCount:hits.length,prediction,hits});
+    });
 
-    triplets.forEach(triplet=>{
-      const matches=occurrences.get(follow3Key(triplet))||[];
-      matches.forEach(sourceIndex=>uniqueTransitions.add(sourceIndex));
-
-      if(matches.length<2)return;
-
-      let common=new Set(ordered[matches[0]+1].nums.map(Number));
-      for(let i=1;i<matches.length && common.size;i++){
-        const nextSet=new Set(ordered[matches[i]+1].nums.map(Number));
+    const baselineSupport=new Map(),baselineFollowFrequency=new Map(),uniqueSources=new Set();
+    stats.forEach(stat=>{
+      stat.matches.forEach(sourceIndex=>uniqueSources.add(sourceIndex));
+      if(stat.matches.length<2)return;
+      let common=new Set(ordered[stat.matches[0]+1].nums.map(Number));
+      for(let i=1;i<stat.matches.length&&common.size;i++){
+        const nextSet=new Set(ordered[stat.matches[i]+1].nums.map(Number));
         common=new Set([...common].filter(number=>nextSet.has(number)));
       }
-
-      common.forEach(number=>
-        candidateSupport.set(number,(candidateSupport.get(number)||0)+1)
-      );
+      common.forEach(number=>baselineSupport.set(number,(baselineSupport.get(number)||0)+1));
     });
-
-    const uniqueFollowFrequency=new Map();
-    uniqueTransitions.forEach(sourceIndex=>{
-      ordered[sourceIndex+1].nums.forEach(number=>
-        uniqueFollowFrequency.set(number,(uniqueFollowFrequency.get(number)||0)+1)
-      );
+    uniqueSources.forEach(sourceIndex=>{
+      ordered[sourceIndex+1].nums.forEach(number=>baselineFollowFrequency.set(number,(baselineFollowFrequency.get(number)||0)+1));
     });
-
-    const candidatePool=[...candidateSupport.keys()].sort((a,b)=>
-      (candidateSupport.get(b)||0)-(candidateSupport.get(a)||0) ||
-      (uniqueFollowFrequency.get(b)||0)-(uniqueFollowFrequency.get(a)||0) ||
+    const baselinePrediction=[...baselineSupport.keys()].sort((a,b)=>
+      (baselineSupport.get(b)||0)-(baselineSupport.get(a)||0)||
+      (baselineFollowFrequency.get(b)||0)-(baselineFollowFrequency.get(a)||0)||
       a-b
-    );
+    ).slice(0,6);
+    baselineEvaluations.push({predictedCount:baselinePrediction.length,hitCount:baselinePrediction.filter(number=>targetSet.has(number)).length});
 
-    const prediction=candidatePool.slice(0,6).sort((a,b)=>a-b);
-    const actualSet=new Set(target.nums.map(Number));
-    const hits=prediction.filter(number=>actualSet.has(number));
-
-    evaluations.push({
-      referenceDraw:reference.draw,
-      targetDraw:target.draw,
-      predictedCount:prediction.length,
-      prediction,
-      hitCount:hits.length,
-      hits
-    });
-
-    // The reference draw becomes a searchable historical source only
-    // after its target draw has been evaluated.
     addSourceDraw(referenceIndex);
   }
 
-  const predicted=evaluations.filter(item=>item.predictedCount>0);
-  const fullSix=predicted.filter(item=>item.predictedCount===6);
-  const hitDistribution=[0,1,2,3,4,5,6].map(hitCount=>({
-    hitCount,
-    count:predicted.filter(item=>item.hitCount===hitCount).length
-  }));
+  const total=evaluations.get(FOLLOW3_CONFIGS[0].id).length;
+  const trainEnd=Math.floor(total*.60);
+  const validationEnd=Math.floor(total*.80);
 
-  const totalHits=predicted.reduce((sum,item)=>sum+item.hitCount,0);
-  const totalPredictedNumbers=predicted.reduce((sum,item)=>sum+item.predictedCount,0);
+  const models=FOLLOW3_CONFIGS.map(config=>{
+    const items=evaluations.get(config.id);
+    return {
+      config,
+      development:summarizeFollow3Segment(items,0,trainEnd),
+      validation:summarizeFollow3Segment(items,trainEnd,validationEnd),
+      test:summarizeFollow3Segment(items,validationEnd,total),
+      all:summarizeFollow3Segment(items,0,total)
+    };
+  });
 
-  const atLeast=minimum=>
-    predicted.length
-      ? predicted.filter(item=>item.hitCount>=minimum).length/predicted.length
-      : 0;
+  const eligible=models.filter(model=>model.validation.predictionRounds>=50);
+  const selected=[...eligible].sort((a,b)=>
+    b.validation.excessHits-a.validation.excessHits||
+    b.validation.numberHitRate-a.validation.numberHitRate||
+    b.validation.coverage-a.validation.coverage
+  )[0]||models[0];
 
-  const weightedRandomAtLeast=minimum=>
-    predicted.length
-      ? predicted.reduce((sum,item)=>sum+hypergeomAtLeast(item.predictedCount,minimum),0)/predicted.length
-      : 0;
+  const selectedPass=
+    selected.validation.numberHitRate>FOLLOW3_BASE_RATE&&
+    selected.test.numberHitRate>FOLLOW3_BASE_RATE&&
+    selected.test.predictionRounds>=100;
 
-  const averageHits=predicted.length?totalHits/predicted.length:0;
-  const randomAverageHits=predicted.length
-    ? predicted.reduce((sum,item)=>sum+item.predictedCount*6/45,0)/predicted.length
-    : 0;
-
-  const numberHitRate=totalPredictedNumbers?totalHits/totalPredictedNumbers:0;
-  const randomNumberHitRate=6/45;
+  const interval=wilsonInterval(selected.test.totalHits,selected.test.totalPredictedNumbers);
+  const expected=selected.test.totalPredictedNumbers*FOLLOW3_BASE_RATE;
+  const sd=Math.sqrt(selected.test.totalPredictedNumbers*FOLLOW3_BASE_RATE*(1-FOLLOW3_BASE_RATE));
+  const zScore=sd?(selected.test.totalHits-expected)/sd:0;
 
   return {
-    totalTargets:evaluations.length,
-    predictionRounds:predicted.length,
-    noSignalRounds:evaluations.length-predicted.length,
-    fullSixRounds:fullSix.length,
-    hitDistribution,
-    atLeast1:atLeast(1),
-    atLeast2:atLeast(2),
-    atLeast3:atLeast(3),
-    randomAtLeast1:weightedRandomAtLeast(1),
-    randomAtLeast2:weightedRandomAtLeast(2),
-    randomAtLeast3:weightedRandomAtLeast(3),
-    averageHits,
-    randomAverageHits,
-    numberHitRate,
-    randomNumberHitRate,
-    totalHits,
-    totalPredictedNumbers
+    totalTargets:total,trainEnd,validationEnd,selected,selectedPass,models,
+    baseline:{
+      validation:summarizeFollow3Segment(baselineEvaluations,trainEnd,validationEnd),
+      test:summarizeFollow3Segment(baselineEvaluations,validationEnd,total),
+      all:summarizeFollow3Segment(baselineEvaluations,0,total)
+    },
+    interval,zScore,randomNumberHitRate:FOLLOW3_BASE_RATE
   };
 }
 
-function analyzeFollow3(rows){
+function analyzeFollow3(rows,backtest){
   const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
   const latestRow=ordered[ordered.length-1];
-  const latestSeven=[...new Set([...latestRow.nums.map(Number),Number(latestRow.bonus)])].sort((a,b)=>a-b);
-  const triplets=chooseExact(latestSeven,3);
-  if(latestSeven.length!==7 || triplets.length!==35){
-    throw new Error(`7수 전체 조합 생성 오류: 번호 ${latestSeven.length}개, 조합 ${triplets.length}개`);
+  const latestSix=latestRow.nums.map(Number).sort((a,b)=>a-b);
+  const triplets=chooseExact(latestSix,3);
+  if(latestSix.length!==6||triplets.length!==20){
+    throw new Error(`본번호 6수 전체 조합 생성 오류: 번호 ${latestSix.length}개, 조합 ${triplets.length}개`);
   }
 
-  const candidateSupport=new Map();
-  const candidateTriplets=new Map();
-  const uniqueTransitions=new Map();
-
-  const patterns=triplets.map(triplet=>{
-    const matches=[];
-
-    for(let i=0;i<ordered.length-1;i++){
-      const source=ordered[i];
-      const sourceSeven=new Set([...source.nums.map(Number),Number(source.bonus)]);
-      if(triplet.every(number=>sourceSeven.has(number))){
-        const next=ordered[i+1];
-        matches.push({
-          source:{...source,seven:[...source.nums.map(Number),Number(source.bonus)].sort((a,b)=>a-b)},
-          next:{...next,nums:next.nums.map(Number).sort((a,b)=>a-b)}
-        });
-        uniqueTransitions.set(source.draw,next);
-      }
-    }
-
-    const frequency=new Map();
-    matches.forEach(match=>{
-      match.next.nums.forEach(number=>frequency.set(number,(frequency.get(number)||0)+1));
+  const occurrences=new Map();
+  for(let sourceIndex=0;sourceIndex<ordered.length-1;sourceIndex++){
+    chooseExact(ordered[sourceIndex].nums.map(Number).sort((a,b)=>a-b),3).forEach(triplet=>{
+      const key=follow3Key(triplet);
+      if(!occurrences.has(key))occurrences.set(key,[]);
+      occurrences.get(key).push(sourceIndex);
     });
+  }
 
-    const repeatedNumbers=[...frequency.entries()]
-      .filter(([,count])=>count>=2)
-      .sort((a,b)=>b[1]-a[1]||a[0]-b[0])
-      .map(([number,count])=>({number,count,rate:count/matches.length}));
+  const selectedConfig=backtest.selected.config;
+  const stats=follow3TripletStats(ordered,ordered.length-1,triplets,occurrences);
+  const scored=scoreFollow3Stats(stats,selectedConfig);
 
-    let commonNumbers=[];
-    if(matches.length>=2){
-      commonNumbers=[...matches[0].next.nums].filter(number=>
-        matches.every(match=>match.next.nums.includes(number))
-      ).sort((a,b)=>a-b);
-    }
+  const patterns=stats.map(stat=>{
+    const sampleCount=stat.matches.length;
+    const rateRows=[...stat.counts.keys()].map(number=>{
+      const rawRate=sampleCount?(stat.counts.get(number)||0)/sampleCount:0;
+      const recentRate=stat.weightSum?(stat.weightedCounts.get(number)||0)/stat.weightSum:0;
+      const blendedRate=.35*rawRate+.65*recentRate;
+      const qualifies=sampleCount>=selectedConfig.minSample&&blendedRate>=selectedConfig.minRate&&blendedRate>FOLLOW3_BASE_RATE;
+      const contribution=qualifies?(blendedRate-FOLLOW3_BASE_RATE)*Math.sqrt(sampleCount):0;
+      return {number,rawRate,recentRate,blendedRate,qualifies,contribution};
+    }).sort((a,b)=>b.blendedRate-a.blendedRate||a.number-b.number);
 
-    commonNumbers.forEach(number=>{
-      candidateSupport.set(number,(candidateSupport.get(number)||0)+1);
-      if(!candidateTriplets.has(number))candidateTriplets.set(number,[]);
-      candidateTriplets.get(number).push([...triplet]);
-    });
+    const matches=stat.matches.map(sourceIndex=>({
+      source:{...ordered[sourceIndex],six:ordered[sourceIndex].nums.map(Number).sort((a,b)=>a-b)},
+      next:{...ordered[sourceIndex+1],nums:ordered[sourceIndex+1].nums.map(Number).sort((a,b)=>a-b)}
+    }));
 
     return {
-      triplet,
-      label:triplet.join(", "),
-      matchCount:matches.length,
-      repeatedNumbers,
-      commonNumbers,
+      triplet:stat.triplet,label:stat.triplet.join(", "),matchCount:sampleCount,
       latestMatchDraw:matches.length?matches[matches.length-1].source.draw:null,
+      repeatedNumbers:rateRows.filter(item=>item.rawRate>0&&sampleCount>=2&&Math.round(item.rawRate*sampleCount)>=2),
+      topRates:rateRows.slice(0,6),
+      scoredNumbers:rateRows.filter(item=>item.qualifies).sort((a,b)=>b.contribution-a.contribution),
       matches
     };
   });
 
-  const uniqueFollowFrequency=new Map();
-  uniqueTransitions.forEach(next=>{
-    next.nums.forEach(number=>
-      uniqueFollowFrequency.set(number,(uniqueFollowFrequency.get(number)||0)+1)
-    );
-  });
-
-  const candidatePool=[...candidateSupport.entries()]
-    .map(([number,support])=>({
-      number,
-      support,
-      uniqueFollowCount:uniqueFollowFrequency.get(number)||0,
-      triplets:candidateTriplets.get(number)||[]
-    }))
-    .sort((a,b)=>
-      b.support-a.support ||
-      b.uniqueFollowCount-a.uniqueFollowCount ||
-      a.number-b.number
-    );
-
   return {
-    latestRow,
-    targetDraw:Number(latestRow.draw)+1,
-    latestSeven,
-    tripletCount:triplets.length,
-    patterns,
-    totalMatchSignals:patterns.reduce((sum,p)=>sum+p.matchCount,0),
-    uniqueMatchDraws:uniqueTransitions.size,
-    matchedTriplets:patterns.filter(p=>p.matchCount>0).length,
-    commonTriplets:patterns.filter(p=>p.commonNumbers.length>0).length,
-    candidatePool,
-    prediction:[...candidatePool.slice(0,6)].sort((a,b)=>a.number-b.number)
+    latestRow,targetDraw:Number(latestRow.draw)+1,latestSix,tripletCount:triplets.length,
+    patterns,selectedConfig,modelAdopted:backtest.selectedPass,
+    candidatePool:scored.candidatePool,prediction:backtest.selectedPass?scored.prediction:[],
+    totalMatchSignals:patterns.reduce((sum,pattern)=>sum+pattern.matchCount,0),
+    uniqueMatchDraws:new Set(stats.flatMap(stat=>stat.matches)).size,
+    contributingTriplets:patterns.filter(pattern=>pattern.scoredNumbers.length>0).length
   };
 }
 
@@ -1496,8 +1556,8 @@ function analyze(rows){
     return Object.values(c).some(v=>v>=2);
   }).length;
   const composite=analyzeComposite(rows,latest);
-  const follow3=analyzeFollow3(rows);
   const follow3Backtest=analyzeFollow3Backtest(rows);
+  const follow3=analyzeFollow3(rows,follow3Backtest);
   return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest};
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
@@ -1688,120 +1748,123 @@ function renderCompositeDraws(pattern){
 
 
 
-function pct(value){
-  return `${(value*100).toFixed(1)}%`;
-}
+function pct(value,digits=1){return `${(value*100).toFixed(digits)}%`;}
 
 function renderFollow3Backtest(){
   const b=state.analysis.follow3Backtest;
+  const selected=b.selected;
+  const test=selected.test;
+  const edge=(test.numberHitRate-b.randomNumberHitRate)*100;
 
   document.getElementById("followBacktestKpis").innerHTML=[
-    ["예측 생성 회차",b.predictionRounds,`전체 ${b.totalTargets}회 · 무신호 ${b.noSignalRounds}회`],
-    ["1개 이상 적중",pct(b.atLeast1),`무작위 기준 ${pct(b.randomAtLeast1)}`],
-    ["2개 이상 적중",pct(b.atLeast2),`무작위 기준 ${pct(b.randomAtLeast2)}`],
-    ["3개 이상 적중",pct(b.atLeast3),`무작위 기준 ${pct(b.randomAtLeast3)}`],
-    ["번호 적중률",pct(b.numberHitRate),`무작위 기준 ${pct(b.randomNumberHitRate)}`]
-  ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
+    ["선택 모델",selected.config.label,b.selectedPass?"최종시험 기준 통과":"채택 보류"],
+    ["최종시험 회차",test.predictionRounds,`커버리지 ${pct(test.coverage)}`],
+    ["번호 적중률",pct(test.numberHitRate,2),`무작위 ${pct(test.randomNumberHitRate,2)}`],
+    ["2개 이상 적중",pct(test.atLeast2),`무작위 ${pct(test.randomAtLeast2)}`],
+    ["3개 이상 적중",pct(test.atLeast3),`무작위 ${pct(test.randomAtLeast3)}`]
+  ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value" style="font-size:${String(x[1]).length>14?16:25}px">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
 
-  const maxCount=Math.max(1,...b.hitDistribution.map(item=>item.count));
-  document.getElementById("followBacktestBars").innerHTML=b.hitDistribution
-    .filter(item=>item.count>0)
-    .map(item=>`
-      <div class="backtest-row">
-        <div class="backtest-label">${item.hitCount}개 적중</div>
-        <div class="backtest-track"><span class="backtest-fill" style="width:${item.count/maxCount*100}%"></span></div>
-        <div class="backtest-value">${item.count}회</div>
-      </div>`).join("");
+  const maxCount=Math.max(1,...test.hitDistribution.map(item=>item.count));
+  document.getElementById("followBacktestBars").innerHTML=test.hitDistribution.filter(item=>item.count>0).map(item=>`
+    <div class="backtest-row">
+      <div class="backtest-label">${item.hitCount}개 적중</div>
+      <div class="backtest-track"><span class="backtest-fill" style="width:${item.count/maxCount*100}%"></span></div>
+      <div class="backtest-value">${item.count}회</div>
+    </div>`).join("");
 
-  const edge=(b.numberHitRate-b.randomNumberHitRate)*100;
+  const comparisonRows=[
+    {id:"baseline",label:"기존 완전교집합",validation:b.baseline.validation,test:b.baseline.test,selected:false},
+    ...b.models.map(model=>({
+      id:model.config.id,label:model.config.label,validation:model.validation,test:model.test,
+      selected:model.config.id===selected.config.id
+    }))
+  ];
+
+  document.getElementById("followModelBody").innerHTML=comparisonRows.map(row=>{
+    const testEdge=(row.test.numberHitRate-FOLLOW3_BASE_RATE)*100;
+    const status=row.selected
+      ?(b.selectedPass?'<span class="model-pass">잠정 채택</span>':'<span class="model-fail">채택 보류</span>')
+      :(testEdge>0?'<span class="model-neutral">기준 상회</span>':'<span class="model-fail">기준 미달</span>');
+    return `<tr class="${row.selected?"selected-model":""}">
+      <td>${row.label}${row.selected?' <span class="score-pill">선택</span>':""}</td>
+      <td>${pct(row.validation.numberHitRate,2)}</td>
+      <td>${pct(row.test.numberHitRate,2)} (${testEdge>=0?"+":""}${testEdge.toFixed(2)}%p)</td>
+      <td>${pct(row.test.coverage)}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join("");
+
   let verdict="";
-  if(edge>=1){
-    verdict=`무작위 기준보다 ${edge.toFixed(2)}%p 높았지만, 독립 검증 전에는 예측 우위로 단정하기 어렵습니다.`;
-  }else if(edge<=-1){
-    verdict=`무작위 기준보다 ${Math.abs(edge).toFixed(2)}%p 낮아, 과거 검증에서 예측 우위가 확인되지 않았습니다.`;
+  if(b.selectedPass){
+    verdict=`중간 검증 구간에서 ${selected.config.label}이 선택됐고, 손대지 않은 마지막 20% 구간에서도 `+
+      `번호 적중률 ${pct(test.numberHitRate,2)}로 무작위 ${pct(test.randomNumberHitRate,2)}보다 ${edge.toFixed(2)}%p 높았습니다. `+
+      `다만 95% 신뢰구간은 ${pct(b.interval.low,2)}~${pct(b.interval.high,2)}이고 무작위 기준을 포함하며, `+
+      `z=${b.zScore.toFixed(2)}라 통계적으로 확정된 우위는 아닙니다.`;
   }else{
-    verdict=`무작위 기준과의 차이가 ${edge>=0?"+":""}${edge.toFixed(2)}%p로 매우 작아, 유의미한 예측 우위는 확인되지 않았습니다.`;
+    verdict=`중간 검증에서 선택된 ${selected.config.label}이 마지막 20% 구간에서 무작위 기준을 안정적으로 넘지 못해 현재 모델은 채택하지 않았습니다.`;
   }
 
   document.getElementById("followBacktestComment").innerHTML=
-    `<span class="backtest-comment-strong">검증 코멘트:</span> `+
-    `${b.predictionRounds}개 예측 회차에서 1개 이상 맞은 비율은 ${pct(b.atLeast1)}, `+
-    `2개 이상은 ${pct(b.atLeast2)}, 3개 이상은 ${pct(b.atLeast3)}였습니다. `+
-    `예측번호 한 개가 실제 본번호에 포함된 비율은 ${pct(b.numberHitRate)}이고, `+
-    `<span class="backtest-random">동일 개수의 번호를 무작위로 골랐을 때의 이론값은 ${pct(b.randomNumberHitRate)}</span>입니다. `+
-    `${verdict}`;
+    `<span class="backtest-comment-strong">최종 평가:</span> 보너스 번호는 제외했습니다. ${verdict}`+
+    `<br><span class="confidence-note">설정 선택은 중간 20%, 최종 평가는 마지막 20%로 분리했습니다. 여러 설정을 비교한 탐색 결과이므로 추가 회차 누적 검증이 필요합니다.</span>`;
 }
 
 function renderFollow3(){
   const f=state.analysis.follow3;
+  const b=state.analysis.follow3Backtest;
   const targetLabel=`[${f.targetDraw}회차]`;
 
-  document.getElementById("followPredictionTitle").textContent=
-    `${targetLabel} 패턴 예측번호`;
+  document.getElementById("followPredictionTitle").textContent=`${targetLabel} 개선형 점수 예측번호`;
   document.getElementById("followPredictionDesc").textContent=
-    `전체 35개 조합을 모두 검색한 뒤, 과거 일치가 2회 이상인 조합의 직후 회차들에 모두 공통으로 나온 본번호를 ${targetLabel} 예측 후보로 통합합니다.`;
+    `${b.selected.config.label} 모델을 적용합니다. 전체 후속률 35%, 최근 가중 후속률 65%, 표본 신뢰도와 지지 조합 수를 합산한 점수 순으로 상위 6개를 선정합니다.`;
   document.getElementById("followTargetRule").textContent=
-    `${targetLabel} 예측번호 산출에서는 보너스 번호를 제외하고 본번호 6개만 사용합니다.`;
+    `${targetLabel} 분석은 최신·과거 일치·직후 회차 모두 본번호 6개만 사용하며 보너스 번호는 제외합니다.`;
 
-  document.getElementById("followLatestTitle").textContent=
-    `[${f.latestRow.draw}회차] · ${f.latestRow.date}`;
+  document.getElementById("followLatestTitle").textContent=`[${f.latestRow.draw}회차] · ${f.latestRow.date}`;
+  document.getElementById("followLatestBalls").innerHTML=f.latestSix.map(number=>`<span class="ball" title="본번호">${number}</span>`).join("");
 
-  const mainSet=new Set(f.latestRow.nums);
-  document.getElementById("followLatestBalls").innerHTML=f.latestSeven.map(number=>
-    `<span class="ball ${mainSet.has(number)?"":"bonus-ball"}" title="${mainSet.has(number)?"본번호":"보너스"}">${mainSet.has(number)?number:"+"+number}</span>`
-  ).join("");
-
-  document.getElementById("all35Grid").innerHTML=f.patterns
-    .slice()
-    .sort((a,b)=>a.triplet[0]-b.triplet[0] || a.triplet[1]-b.triplet[1] || a.triplet[2]-b.triplet[2])
-    .map(pattern=>{
-      const cls=pattern.commonNumbers.length
-        ? "all35-chip has-common"
-        : pattern.matchCount
-          ? "all35-chip has-match"
-          : "all35-chip";
-      return `<div class="${cls}" title="과거 일치 ${pattern.matchCount}회">${pattern.label}</div>`;
-    }).join("");
+  document.getElementById("all20Grid").innerHTML=f.patterns.slice().sort((a,b)=>
+    a.triplet[0]-b.triplet[0]||a.triplet[1]-b.triplet[1]||a.triplet[2]-b.triplet[2]
+  ).map(pattern=>{
+    const cls=pattern.scoredNumbers.length?"all20-chip has-common":pattern.matchCount?"all20-chip has-match":"all20-chip";
+    return `<div class="${cls}" title="과거 일치 ${pattern.matchCount}회 · 모델 기여 ${pattern.scoredNumbers.length}개">${pattern.label}</div>`;
+  }).join("");
 
   document.getElementById("follow3Kpis").innerHTML=[
-    ["예측 대상",`[${f.targetDraw}회차]`,"최신 회차 + 1"],
-    ["전체 조합",f.tripletCount,"7C3 · 생략 없음"],
-    ["일치 신호",f.totalMatchSignals,"조합별 과거 일치 합계"],
+    ["예측 대상",targetLabel,"최신 회차 + 1"],
+    ["전체 조합",f.tripletCount,"6C3 · 생략 없음"],
+    ["선택 모델",f.selectedConfig.label,"검증 구간 우승"],
     ["고유 일치 회차",f.uniqueMatchDraws,"중복 회차 제거"],
-    ["완전 공통 조합",f.commonTriplets,"35개 전체 검색 결과"],
-    ["예측 후보",f.candidatePool.length,"공통 후속 번호"]
-  ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
+    ["기여 조합",f.contributingTriplets,"점수 기준 통과"],
+    ["후보 번호",f.candidatePool.length,"점수 보유 번호"]
+  ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value" style="font-size:${String(x[1]).length>14?16:25}px">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
 
   renderFollow3Backtest();
 
-  const prediction=f.prediction;
-  document.getElementById("followPredictionBalls").innerHTML=prediction.length
-    ? prediction.map(item=>`<span class="prediction-ball" title="지지 조합 ${item.support}개 · 고유 후속 회차 ${item.uniqueFollowCount}회">${item.number}</span>`).join("")
-    : '<div class="prediction-empty">2회 이상 일치한 조합에서 완전 공통 후속 번호가 확인되지 않았습니다.</div>';
+  document.getElementById("followPredictionBalls").innerHTML=f.prediction.length
+    ?f.prediction.map(item=>`<span class="prediction-ball" title="점수 ${item.score.toFixed(3)} · 지지 ${item.support}조합 · 평균 후속률 ${pct(item.averageRate)}">${item.number}</span>`).join("")
+    :'<div class="prediction-empty">최종 시험 기준을 통과한 모델이 없어 공식 예측번호를 표시하지 않습니다.</div>';
 
-  let note="";
-  if(f.candidatePool.length===6){
-    note=`완전 공통 후속 후보가 정확히 6개 형성됐습니다. 번호별 지지 조합 수와 고유 후속 회차 빈도를 함께 표시합니다.`;
-  }else if(f.candidatePool.length>6){
-    note=`완전 공통 후보 ${f.candidatePool.length}개 중 지지 조합 수 → 고유 후속 회차 빈도 → 번호 오름차순으로 상위 6개를 표시했습니다.`;
-  }else{
-    note=`완전 공통 후보가 ${f.candidatePool.length}개라 6개를 억지로 채우지 않았습니다. 현재 확인된 후보만 표시합니다.`;
-  }
+  const note=f.modelAdopted
+    ?`${f.selectedConfig.label}이 검증과 최종시험에서 모두 무작위 번호 적중률을 넘어 잠정 채택됐습니다.`
+    :`${f.selectedConfig.label}은 최종시험 기준을 통과하지 못해 예측번호 채택을 보류했습니다.`;
+
   document.getElementById("followPredictionNote").innerHTML=
-    `${note}<br>기준: 과거 일치 2회 이상 · 일치 회차 직후 본번호 교집합 · 보너스 제외.`;
+    `${note}<br>기준: 본번호 6개 · 보너스 번호 제외 · 최근성 반감기 ${FOLLOW3_HALF_LIFE}회 · 번호별 종합점수 상위 6개.`;
 
   document.getElementById("followEvidenceGrid").innerHTML=f.candidatePool.length
-    ? f.candidatePool.map(item=>`
+    ?f.candidatePool.slice(0,12).map(item=>`
       <div class="follow-evidence-card">
         <div class="follow-evidence-head">
           <span class="follow-evidence-number">${item.number}</span>
-          <span class="follow-support">지지 ${item.support}조합 · 후속 ${item.uniqueFollowCount}회</span>
+          <span class="follow-support">점수 ${item.score.toFixed(3)} · 지지 ${item.support}조합</span>
         </div>
+        <div class="mini">평균 후속률 ${pct(item.averageRate)} · 기준 ${pct(f.selectedConfig.minRate)}</div>
         <div class="follow-triplet-list">
-          ${item.triplets.map(t=>`<span class="follow-triplet-chip">${t.join("·")}</span>`).join("")}
+          ${item.details.slice(0,8).map(detail=>`<span class="follow-triplet-chip" title="표본 ${detail.sampleCount}회 · 후속률 ${pct(detail.blendedRate)}">${detail.triplet.join("·")}</span>`).join("")}
         </div>
       </div>`).join("")
-    : '<div class="notice">공통 후속 번호 근거가 없습니다.</div>';
+    :'<div class="notice">현재 선택 모델의 점수 기준을 통과한 후보 번호가 없습니다.</div>';
 
   renderFollow3Table();
 }
@@ -1813,43 +1876,39 @@ function renderFollow3Table(){
   const search=document.getElementById("follow3Search").value.replace(/\s/g,"");
 
   let rows=f.patterns.filter(pattern=>{
-    const statusOk=
-      status==="all" ||
-      (status==="common" && pattern.commonNumbers.length>0) ||
-      (status==="repeat" && pattern.repeatedNumbers.length>0) ||
-      (status==="none" && pattern.commonNumbers.length===0);
-    const searchOk=!search || pattern.label.replace(/\s/g,"").includes(search);
-    return statusOk && searchOk;
+    const statusOk=status==="all"||
+      (status==="common"&&pattern.scoredNumbers.length>0)||
+      (status==="repeat"&&pattern.repeatedNumbers.length>0)||
+      (status==="none"&&pattern.scoredNumbers.length===0);
+    const searchOk=!search||pattern.label.replace(/\s/g,"").includes(search);
+    return statusOk&&searchOk;
   });
 
   rows=[...rows].sort((a,b)=>{
-    if(sort==="matches")return b.matchCount-a.matchCount || a.label.localeCompare(b.label);
-    if(sort==="numbers")return a.triplet[0]-b.triplet[0] || a.triplet[1]-b.triplet[1] || a.triplet[2]-b.triplet[2];
-    return b.commonNumbers.length-a.commonNumbers.length ||
-      b.repeatedNumbers.length-a.repeatedNumbers.length ||
-      b.matchCount-a.matchCount ||
-      a.label.localeCompare(b.label);
+    if(sort==="matches")return b.matchCount-a.matchCount||a.label.localeCompare(b.label);
+    if(sort==="numbers")return a.triplet[0]-b.triplet[0]||a.triplet[1]-b.triplet[1]||a.triplet[2]-b.triplet[2];
+    const aScore=a.scoredNumbers.reduce((sum,item)=>sum+item.contribution,0);
+    const bScore=b.scoredNumbers.reduce((sum,item)=>sum+item.contribution,0);
+    return bScore-aScore||b.scoredNumbers.length-a.scoredNumbers.length||b.matchCount-a.matchCount||a.label.localeCompare(b.label);
   });
 
   const body=document.getElementById("follow3Body");
   body.innerHTML=rows.map(pattern=>{
     const id=`follow3:${pattern.label}`;
     const expanded=state.expanded===id;
-    const repeated=pattern.repeatedNumbers.length
-      ? pattern.repeatedNumbers.slice(0,8).map(x=>`${x.number}(${x.count})`).join(", ")
-      : "-";
-    const common=pattern.commonNumbers.length
-      ? `<span class="follow-common">${pattern.commonNumbers.join(", ")}</span>`
-      : "-";
-    const detail=expanded
-      ? `<tr><td colspan="5" class="details">${renderFollow3Matches(pattern)}</td></tr>`
-      : "";
+    const topRates=pattern.topRates.length
+      ?pattern.topRates.slice(0,6).map(item=>`${item.number}(${pct(item.blendedRate)})`).join(", ")
+      :"-";
+    const scored=pattern.scoredNumbers.length
+      ?`<span class="follow-score">${pattern.scoredNumbers.slice(0,8).map(item=>item.number).join(", ")}</span>`
+      :"-";
+    const detail=expanded?`<tr><td colspan="5" class="details">${renderFollow3Matches(pattern)}</td></tr>`:"";
 
     return `<tr data-follow3="${esc(pattern.label)}">
       <td class="pattern">${esc(pattern.label)}</td>
       <td>${pattern.matchCount}회</td>
-      <td class="follow-repeat">${repeated}</td>
-      <td>${common}</td>
+      <td class="follow-repeat">${topRates}</td>
+      <td>${scored}</td>
       <td>${pattern.latestMatchDraw??"-"}</td>
     </tr>${detail}`;
   }).join("");
@@ -1864,24 +1923,20 @@ function renderFollow3Table(){
 }
 
 function renderFollow3Matches(pattern){
-  if(!pattern.matches.length){
-    return '<div class="notice">과거 일치 회차가 없습니다.</div>';
-  }
-
+  if(!pattern.matches.length)return '<div class="notice">과거 일치 회차가 없습니다.</div>';
+  const scoredSet=new Set(pattern.scoredNumbers.map(item=>item.number));
   return `<div class="draws">${[...pattern.matches].reverse().map(match=>{
     const tripletSet=new Set(pattern.triplet);
     return `<div class="follow-match-card">
       <div class="follow-match-title">
-        <b>${match.source.draw}회 일치</b>
-        <span class="follow-arrow">→</span>
-        <b>${match.next.draw}회 후속</b>
+        <b>${match.source.draw}회 일치</b><span class="follow-arrow">→</span><b>${match.next.draw}회 직후</b>
       </div>
       <div class="mini">${match.source.date} → ${match.next.date}</div>
       <div class="nums follow-source-balls">
-        ${match.source.seven.map(number=>`<span class="ball ${tripletSet.has(number)?"selected":""}">${number}</span>`).join("")}
+        ${match.source.six.map(number=>`<span class="ball ${tripletSet.has(number)?"selected":""}">${number}</span>`).join("")}
       </div>
       <div class="nums follow-next-balls">
-        ${match.next.nums.map(number=>`<span class="ball ${pattern.commonNumbers.includes(number)?"focus":""}">${number}</span>`).join("")}
+        ${match.next.nums.map(number=>`<span class="ball ${scoredSet.has(number)?"focus":""}">${number}</span>`).join("")}
       </div>
     </div>`;
   }).join("")}</div>`;
@@ -1894,7 +1949,7 @@ function switchView(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
   document.getElementById("pageTitle").textContent={
-    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"35조합 후속 추적",draws:"회차 탐색",ideas:"분석 아이디어"
+    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"20조합 점수 예측",draws:"회차 탐색",ideas:"분석 아이디어"
   }[id];
   if(window.matchMedia("(max-width:820px)").matches){
     window.scrollTo({top:0,behavior:"smooth"});
