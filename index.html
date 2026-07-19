@@ -34,9 +34,14 @@ button,select,input{font:inherit}
 .brand-sub{
   font-size:10px;
   font-weight:700;
-  letter-spacing:1.2px;
+  letter-spacing:1.05px;
   line-height:1.15;
-  color:var(--muted)
+  color:var(--muted);
+  white-space:nowrap
+}
+.brand-version{
+  letter-spacing:.3px;
+  color:var(--accent)
 }
 .version{font-size:12px;color:var(--muted);margin-bottom:26px}
 .nav button{width:100%;border:0;background:transparent;color:var(--muted);padding:12px 13px;text-align:left;border-radius:10px;cursor:pointer;margin-bottom:5px}
@@ -906,9 +911,8 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   <aside class="sidebar">
     <div class="brand">
       <span class="brand-main">Ai365Lab</span>
-      <span class="brand-sub">LOTTO PATTERN LAB</span>
+      <span class="brand-sub">LOTTO PATTERN LAB <span class="brand-version">· v0.9</span></span>
     </div>
-    <div class="version">v0.9 · 냉각 반등 실전 추적</div>
     <nav class="nav">
       <button class="active" data-view="dashboard"><span class="nav-icon">▦</span><span class="nav-full">전체 현황</span><span class="nav-short">홈</span></button>
       <button data-view="ending"><span class="nav-icon">◉</span><span class="nav-full">개별 끝수</span><span class="nav-short">끝수</span></button>
