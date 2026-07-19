@@ -122,7 +122,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   .sidebar .brand,.sidebar .version,.sidebar .side-note{display:none}
   .nav{
     display:grid;
-    grid-template-columns:repeat(6,minmax(0,1fr));
+    grid-template-columns:repeat(7,minmax(0,1fr));
     gap:4px;
     overflow:visible;
   }
@@ -752,18 +752,147 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
 .confidence-note{display:inline-block;margin-top:5px;color:var(--muted);font-size:10px}
 @media(max-width:820px){.model-table{min-width:650px}}
 
+
+/* ===== Cooling rebound 10/50 ===== */
+.cooling-hero{
+  background:linear-gradient(145deg,rgba(12,41,56,.98),rgba(8,26,40,.98));
+}
+.cooling-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+.cooling-status{
+  flex:0 0 auto;
+  padding:6px 10px;
+  border:1px solid rgba(255,207,112,.48);
+  border-radius:999px;
+  background:rgba(255,207,112,.10);
+  color:#ffd27c;
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.cooling-formula{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+  margin:12px 0 14px;
+  padding:10px 12px;
+  border:1px dashed rgba(147,170,188,.34);
+  border-radius:10px;
+  background:rgba(7,23,34,.58);
+  color:var(--muted);
+  font-size:11px;
+}
+.cooling-formula b{color:var(--accent2)}
+.cooling-prediction{
+  background:linear-gradient(145deg,rgba(22,52,68,.98),rgba(10,31,47,.98));
+}
+.cooling-table tr.cooling-selected{
+  background:rgba(240,179,90,.10);
+}
+.cooling-table tr.cooling-selected td:nth-child(2),
+.cooling-score-positive{
+  color:#ffd27c;
+  font-weight:800;
+}
+.cooling-score-negative{color:#79afbd}
+.cooling-rank{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:25px;
+  height:25px;
+  padding:0 6px;
+  border-radius:999px;
+  background:var(--chip);
+  font-size:9px;
+}
+.cooling-selected .cooling-rank{
+  background:var(--accent2);
+  color:#241702;
+  font-weight:900;
+}
+.cooling-window{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.cooling-window strong{font-size:12px}
+.cooling-window span{color:var(--muted);font-size:9px}
+.cooling-backtest{
+  background:linear-gradient(145deg,rgba(13,38,53,.98),rgba(8,27,41,.98));
+}
+.cooling-segment-table{min-width:690px}
+.cooling-verdict-good{color:#ffd27c;font-weight:800}
+.cooling-verdict-warn{color:#ff91b8;font-weight:800}
+@media(max-width:820px){
+  .cooling-heading{display:block}
+  .cooling-status{display:inline-block;margin-top:7px}
+  .cooling-formula{font-size:9px}
+  #cooling table{display:block;width:100%;min-width:0}
+  #cooling .cooling-table thead{display:none}
+  #cooling .cooling-table tbody{display:grid;gap:8px;width:100%}
+  #cooling .cooling-table tr{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:0 8px;
+    padding:9px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:var(--panel2);
+  }
+  #cooling .cooling-table tr.cooling-selected{
+    border-color:rgba(240,179,90,.65);
+    background:rgba(240,179,90,.08);
+  }
+  #cooling .cooling-table td{
+    min-width:0;
+    padding:7px 2px;
+    border:0;
+    border-top:1px solid rgba(35,67,90,.48);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:7px;
+    text-align:right;
+    font-size:10px;
+  }
+  #cooling .cooling-table td::before{
+    color:var(--muted);
+    font-size:8px;
+    flex:0 0 auto;
+  }
+  #cooling .cooling-table td:first-child,
+  #cooling .cooling-table td:nth-child(2){
+    border-top:0;
+  }
+  #cooling .cooling-table td:first-child::before{content:"순위"}
+  #cooling .cooling-table td:nth-child(2)::before{content:"번호"}
+  #cooling .cooling-table td:nth-child(3)::before{content:"냉각 점수"}
+  #cooling .cooling-table td:nth-child(4)::before{content:"직전 40회"}
+  #cooling .cooling-table td:nth-child(5)::before{content:"최근 10회"}
+  #cooling .cooling-table td:nth-child(6)::before{content:"누적"}
+  #cooling .cooling-table td:nth-child(7)::before{content:"상태"}
+  .cooling-segment-table{min-width:620px}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">LOTTO PATTERN LAB</div>
-    <div class="version">v0.8 · 개선형 점수 모델</div>
+    <div class="version">v0.9 · 냉각 반등 실전 추적</div>
     <nav class="nav">
       <button class="active" data-view="dashboard"><span class="nav-icon">▦</span><span class="nav-full">전체 현황</span><span class="nav-short">홈</span></button>
       <button data-view="ending"><span class="nav-icon">◉</span><span class="nav-full">개별 끝수</span><span class="nav-short">끝수</span></button>
       <button data-view="composite"><span class="nav-icon">⌘</span><span class="nav-full">복합 끝수</span><span class="nav-short">복합</span></button>
       <button data-view="follow3"><span class="nav-icon">△</span><span class="nav-full">20조합 점수 예측</span><span class="nav-short">점수</span></button>
+      <button data-view="cooling"><span class="nav-icon">↘</span><span class="nav-full">냉각 반등 10/50</span><span class="nav-short">냉각</span></button>
       <button data-view="draws"><span class="nav-icon">≡</span><span class="nav-full">회차 탐색</span><span class="nav-short">회차</span></button>
       <button data-view="ideas"><span class="nav-icon">＋</span><span class="nav-full">분석 아이디어</span><span class="nav-short">아이디어</span></button>
     </nav>
@@ -1021,6 +1150,114 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
       </div>
     </section>
 
+
+    <section id="cooling" class="view">
+      <div class="panel cooling-hero">
+        <div class="cooling-heading">
+          <div>
+            <h2>냉각 반등 10/50</h2>
+            <div class="desc">
+              직전 40회에서는 비교적 자주 나왔지만 최근 10회에서 출현이 줄어든 번호를 찾습니다.
+              <span class="bonus-exclusion">보너스 번호는 계산과 검증에서 제외합니다.</span>
+            </div>
+          </div>
+          <span class="cooling-status">그림자 예측 · 검증 중</span>
+        </div>
+
+        <div class="cooling-formula">
+          <span>냉각 점수</span>
+          <b>=</b>
+          <span>직전 40회 출현 횟수 ÷ 40</span>
+          <b>−</b>
+          <span>최근 10회 출현 횟수 ÷ 10</span>
+        </div>
+
+        <div class="follow-latest">
+          <div>
+            <div class="follow-latest-title" id="coolingLatestTitle"></div>
+            <div class="mini">본번호 6개 · 보너스 번호 제외 · 고정 규칙</div>
+          </div>
+          <div class="nums follow-latest-balls" id="coolingLatestBalls"></div>
+        </div>
+
+        <div class="cards" id="coolingKpis"></div>
+      </div>
+
+      <div class="panel cooling-prediction">
+        <h2 id="coolingPredictionTitle">예측 회차 계산 중</h2>
+        <div class="desc">
+          냉각 점수가 높은 순으로 6개를 선택합니다. 동점이면 직전 40회 출현 횟수,
+          전체 누적 저빈도, 번호 오름차순으로 순위를 정합니다.
+        </div>
+        <div class="prediction-balls" id="coolingPredictionBalls"></div>
+        <div class="notice" id="coolingPredictionNote"></div>
+      </div>
+
+      <div class="panel">
+        <h2>45개 번호 냉각 점수</h2>
+        <div class="desc">
+          모든 번호를 생략 없이 표시합니다. 점수가 클수록 중기 흐름에 비해 최근 10회에서 더 빠르게 식은 번호입니다.
+        </div>
+        <div class="controls">
+          <select id="coolingFilter">
+            <option value="all">전체 45개 번호</option>
+            <option value="selected">예측번호 6개</option>
+            <option value="positive">냉각 점수 양수</option>
+            <option value="zero">0점</option>
+            <option value="negative">냉각 점수 음수</option>
+          </select>
+          <select id="coolingSort">
+            <option value="score">냉각 점수 높은 순</option>
+            <option value="number">번호 오름차순</option>
+            <option value="mid">직전 40회 출현 순</option>
+            <option value="recent">최근 10회 출현 적은 순</option>
+          </select>
+          <input id="coolingSearch" type="text" placeholder="번호 검색: 예) 23">
+        </div>
+        <div class="table-wrap">
+          <table class="cooling-table">
+            <thead><tr>
+              <th>순위</th><th>번호</th><th>냉각 점수</th>
+              <th>직전 40회</th><th>최근 10회</th><th>누적 출현</th><th>상태</th>
+            </tr></thead>
+            <tbody id="coolingBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel cooling-backtest">
+        <h2>고정 규칙 순차 검증</h2>
+        <div class="desc">
+          매 목표 회차마다 그 이전 50회만 보고 번호를 산출했습니다.
+          전체 기간의 앞 60%, 중간 20%, 마지막 20%를 분리해 결과의 흔들림을 확인합니다.
+        </div>
+
+        <div class="cards" id="coolingBacktestKpis"></div>
+        <div class="backtest-bars" id="coolingBacktestBars"></div>
+
+        <div class="table-wrap">
+          <table class="cooling-segment-table">
+            <thead><tr>
+              <th>구간</th><th>예측 회차</th><th>번호 적중률</th>
+              <th>1개 이상</th><th>2개 이상</th><th>3개 이상</th>
+            </tr></thead>
+            <tbody id="coolingSegmentBody"></tbody>
+          </table>
+        </div>
+
+        <div class="notice" id="coolingBacktestComment"></div>
+      </div>
+
+      <div class="panel">
+        <h2>운영 판정</h2>
+        <div class="notice">
+          이 모델은 공식 예측기가 아니라 <b>고정 규칙을 앞으로 계속 기록하는 그림자 모델</b>입니다.
+          과거 최종시험에서 무작위 기준을 조금 웃돌았지만 신뢰구간이 겹쳐 예측 우위가 확정되지 않았습니다.
+          규칙을 중간에 바꾸지 않고 신규 회차 성과를 누적해 재평가합니다.
+        </div>
+      </div>
+    </section>
+
     <section id="draws" class="view">
       <div class="panel">
         <h2>회차 탐색</h2>
@@ -1082,6 +1319,7 @@ let state = {
 };
 
 const IDEAS = [
+  ["냉각 반등 10/50","직전 40회 대비 최근 10회에서 출현이 줄어든 번호를 추적","검증 중"],
   ["20조합 점수 예측","후속률·표본 신뢰도·최근성·조합 지지를 합친 점수 모델","구현"],
   ["홀짝 패턴","0:6부터 6:0까지 구성, 빈도, 최근 공백","후속"],
   ["저·고 구간","1~22와 23~45의 비율 및 정확 조합","후속"],
@@ -1505,6 +1743,138 @@ function analyzeFollow3(rows,backtest){
   };
 }
 
+
+function coolingCountRows(rows){
+  const counts=new Map(Array.from({length:45},(_,index)=>[index+1,0]));
+  rows.forEach(row=>row.nums.forEach(number=>counts.set(number,(counts.get(number)||0)+1)));
+  return counts;
+}
+
+function coolingRank(historyRows){
+  if(historyRows.length<50){
+    return {available:false,reason:"최소 50개 회차가 필요합니다.",ranking:[],prediction:[]};
+  }
+
+  const previous40=historyRows.slice(-50,-10);
+  const recent10=historyRows.slice(-10);
+  const count40=coolingCountRows(previous40);
+  const count10=coolingCountRows(recent10);
+  const totalCount=coolingCountRows(historyRows);
+
+  const ranking=Array.from({length:45},(_,index)=>{
+    const number=index+1;
+    const midCount=count40.get(number)||0;
+    const recentCount=count10.get(number)||0;
+    const cumulative=totalCount.get(number)||0;
+    const midRate=midCount/40;
+    const recentRate=recentCount/10;
+    const score=midRate-recentRate;
+    return {number,midCount,recentCount,cumulative,midRate,recentRate,score};
+  }).sort((a,b)=>
+    b.score-a.score ||
+    b.midCount-a.midCount ||
+    a.cumulative-b.cumulative ||
+    a.number-b.number
+  ).map((item,index)=>({...item,rank:index+1,selected:index<6}));
+
+  return {
+    available:true,
+    previous40,
+    recent10,
+    ranking,
+    prediction:ranking.slice(0,6).map(item=>item.number).sort((a,b)=>a-b)
+  };
+}
+
+function summarizeCoolingSegment(items,start,end){
+  const segment=items.slice(start,end);
+  const rounds=segment.length;
+  const totalHits=segment.reduce((sum,item)=>sum+item.hitCount,0);
+  const ratio=minimum=>rounds?segment.filter(item=>item.hitCount>=minimum).length/rounds:0;
+
+  return {
+    rounds,
+    totalHits,
+    numberHitRate:rounds?totalHits/(rounds*6):0,
+    atLeast1:ratio(1),
+    atLeast2:ratio(2),
+    atLeast3:ratio(3),
+    distribution:[0,1,2,3,4,5,6].map(hitCount=>({
+      hitCount,
+      count:segment.filter(item=>item.hitCount===hitCount).length
+    }))
+  };
+}
+
+function coolingWilson(successes,total,z=1.95996398454){
+  if(!total)return {low:0,high:0};
+  const p=successes/total;
+  const denominator=1+z*z/total;
+  const center=(p+z*z/(2*total))/denominator;
+  const half=z*Math.sqrt(p*(1-p)/total+z*z/(4*total*total))/denominator;
+  return {low:Math.max(0,center-half),high:Math.min(1,center+half)};
+}
+
+function analyzeCoolingRebound(rows){
+  const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
+  const current=coolingRank(ordered);
+  const evaluations=[];
+
+  for(let targetIndex=50;targetIndex<ordered.length;targetIndex++){
+    const history=ordered.slice(0,targetIndex);
+    const ranked=coolingRank(history);
+    const actualSet=new Set(ordered[targetIndex].nums.map(Number));
+    const hits=ranked.prediction.filter(number=>actualSet.has(number));
+
+    evaluations.push({
+      targetDraw:ordered[targetIndex].draw,
+      prediction:ranked.prediction,
+      hits,
+      hitCount:hits.length
+    });
+  }
+
+  const total=evaluations.length;
+  const developmentEnd=Math.floor(total*.60);
+  const validationEnd=Math.floor(total*.80);
+  const development=summarizeCoolingSegment(evaluations,0,developmentEnd);
+  const validation=summarizeCoolingSegment(evaluations,developmentEnd,validationEnd);
+  const test=summarizeCoolingSegment(evaluations,validationEnd,total);
+  const all=summarizeCoolingSegment(evaluations,0,total);
+
+  const randomNumberHitRate=6/45;
+  const randomAtLeast1=1-nCr(39,6)/nCr(45,6);
+  const randomAtLeast2=1-(nCr(39,6)+nCr(6,1)*nCr(39,5))/nCr(45,6);
+  const randomAtLeast3=1-(
+    nCr(39,6)+
+    nCr(6,1)*nCr(39,5)+
+    nCr(6,2)*nCr(39,4)
+  )/nCr(45,6);
+
+  const testNumbers=test.rounds*6;
+  const interval=coolingWilson(test.totalHits,testNumbers);
+  const expected=testNumbers*randomNumberHitRate;
+  const standardDeviation=Math.sqrt(testNumbers*randomNumberHitRate*(1-randomNumberHitRate));
+  const zScore=standardDeviation?(test.totalHits-expected)/standardDeviation:0;
+
+  return {
+    current,
+    latestRow:ordered[ordered.length-1],
+    targetDraw:Number(ordered[ordered.length-1].draw)+1,
+    evaluations,
+    development,
+    validation,
+    test,
+    all,
+    randomNumberHitRate,
+    randomAtLeast1,
+    randomAtLeast2,
+    randomAtLeast3,
+    interval,
+    zScore
+  };
+}
+
 function analyze(rows){
   const latest=Math.max(...rows.map(r=>Number(r.draw)));
   const digits={};
@@ -1558,7 +1928,8 @@ function analyze(rows){
   const composite=analyzeComposite(rows,latest);
   const follow3Backtest=analyzeFollow3Backtest(rows);
   const follow3=analyzeFollow3(rows,follow3Backtest);
-  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest};
+  const cooling=analyzeCoolingRebound(rows);
+  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest,cooling};
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
 function fmt(n,d=0){return n==null?"-":Number(n).toFixed(d);}
@@ -1597,6 +1968,7 @@ function renderAll(){
   renderDrawExplorer();
   renderComposite();
   renderFollow3();
+  renderCooling();
   renderIdeas();
 }
 function fillSelects(){
@@ -1942,6 +2314,134 @@ function renderFollow3Matches(pattern){
   }).join("")}</div>`;
 }
 
+
+function renderCooling(){
+  const c=state.analysis.cooling;
+  const targetLabel=`[${c.targetDraw}회차]`;
+
+  document.getElementById("coolingLatestTitle").textContent=
+    `[${c.latestRow.draw}회차] · ${c.latestRow.date}`;
+  document.getElementById("coolingLatestBalls").innerHTML=
+    c.latestRow.nums.map(number=>`<span class="ball">${number}</span>`).join("");
+
+  document.getElementById("coolingPredictionTitle").textContent=
+    `${targetLabel} 냉각 반등 예측번호`;
+  document.getElementById("coolingPredictionBalls").innerHTML=
+    c.current.prediction.map(number=>`<span class="prediction-ball">${number}</span>`).join("");
+
+  const selectedRows=c.current.ranking.filter(item=>item.selected);
+  const strongest=selectedRows[0];
+
+  document.getElementById("coolingKpis").innerHTML=[
+    ["예측 대상",targetLabel,"최신 회차 + 1"],
+    ["중기 창","40회","최근 10회 제외"],
+    ["단기 창","10회","가장 최근 구간"],
+    ["최고 냉각번호",strongest?.number??"-",strongest?`점수 ${strongest.score.toFixed(3)}`:"-"],
+    ["최종시험",pct(c.test.numberHitRate,2),`무작위 ${pct(c.randomNumberHitRate,2)}`]
+  ].map(item=>`<div class="card"><div class="label">${item[0]}</div><div class="value" style="font-size:${String(item[1]).length>12?17:25}px">${item[1]}</div><div class="sub">${item[2]}</div></div>`).join("");
+
+  document.getElementById("coolingPredictionNote").innerHTML=
+    `예측번호는 ${c.current.prediction.join(" · ")}입니다. `+
+    `이 모델은 <b>검증 중인 그림자 예측</b>이며, 보너스 번호는 제외합니다. `+
+    `Google Sheets에 새 회차가 동기화되면 최근 50회 창과 예측 대상 회차가 자동으로 이동합니다.`;
+
+  renderCoolingTable();
+  renderCoolingBacktest();
+}
+
+function renderCoolingTable(){
+  const c=state.analysis.cooling;
+  const filter=document.getElementById("coolingFilter").value;
+  const sort=document.getElementById("coolingSort").value;
+  const search=document.getElementById("coolingSearch").value.trim();
+
+  let rows=c.current.ranking.filter(item=>{
+    const filterOk=
+      filter==="all" ||
+      (filter==="selected"&&item.selected) ||
+      (filter==="positive"&&item.score>0) ||
+      (filter==="zero"&&Math.abs(item.score)<1e-12) ||
+      (filter==="negative"&&item.score<0);
+    const searchOk=!search||String(item.number).includes(search);
+    return filterOk&&searchOk;
+  });
+
+  rows=[...rows].sort((a,b)=>{
+    if(sort==="number")return a.number-b.number;
+    if(sort==="mid")return b.midCount-a.midCount||a.number-b.number;
+    if(sort==="recent")return a.recentCount-b.recentCount||b.midCount-a.midCount||a.number-b.number;
+    return a.rank-b.rank;
+  });
+
+  document.getElementById("coolingBody").innerHTML=rows.map(item=>{
+    const scoreClass=item.score>0?"cooling-score-positive":item.score<0?"cooling-score-negative":"";
+    return `<tr class="${item.selected?"cooling-selected":""}">
+      <td><span class="cooling-rank">${item.rank}</span></td>
+      <td><span class="ball ${item.selected?"focus":""}">${item.number}</span></td>
+      <td class="${scoreClass}">${item.score>=0?"+":""}${item.score.toFixed(3)}</td>
+      <td><div class="cooling-window"><strong>${item.midCount}회</strong><span>${pct(item.midRate)}</span></div></td>
+      <td><div class="cooling-window"><strong>${item.recentCount}회</strong><span>${pct(item.recentRate)}</span></div></td>
+      <td>${item.cumulative}회</td>
+      <td>${item.selected?'<span class="score-pill">예측</span>':item.score>0?"냉각":item.score<0?"가열":"중립"}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderCoolingBacktest(){
+  const c=state.analysis.cooling;
+  const testEdge=(c.test.numberHitRate-c.randomNumberHitRate)*100;
+
+  document.getElementById("coolingBacktestKpis").innerHTML=[
+    ["전체 검증",c.all.rounds,"51회차부터"],
+    ["최종시험",c.test.rounds,"마지막 20%"],
+    ["번호 적중률",pct(c.test.numberHitRate,2),`무작위 ${pct(c.randomNumberHitRate,2)}`],
+    ["2개 이상",pct(c.test.atLeast2),`무작위 ${pct(c.randomAtLeast2)}`],
+    ["3개 이상",pct(c.test.atLeast3),`무작위 ${pct(c.randomAtLeast3)}`]
+  ].map(item=>`<div class="card"><div class="label">${item[0]}</div><div class="value">${item[1]}</div><div class="sub">${item[2]}</div></div>`).join("");
+
+  const maxCount=Math.max(1,...c.test.distribution.map(item=>item.count));
+  document.getElementById("coolingBacktestBars").innerHTML=
+    c.test.distribution.filter(item=>item.count>0).map(item=>`
+      <div class="backtest-row">
+        <div class="backtest-label">${item.hitCount}개 적중</div>
+        <div class="backtest-track"><span class="backtest-fill" style="width:${item.count/maxCount*100}%"></span></div>
+        <div class="backtest-value">${item.count}회</div>
+      </div>`).join("");
+
+  const segments=[
+    ["개발 60%",c.development],
+    ["검증 20%",c.validation],
+    ["최종시험 20%",c.test],
+    ["전체",c.all]
+  ];
+  document.getElementById("coolingSegmentBody").innerHTML=segments.map(([label,item])=>`
+    <tr>
+      <td>${label}</td>
+      <td>${item.rounds}</td>
+      <td>${pct(item.numberHitRate,2)}</td>
+      <td>${pct(item.atLeast1)}</td>
+      <td>${pct(item.atLeast2)}</td>
+      <td>${pct(item.atLeast3)}</td>
+    </tr>`).join("");
+
+  let verdict="";
+  if(testEdge>0){
+    verdict=
+      `최종시험 번호 적중률은 ${pct(c.test.numberHitRate,2)}로 무작위 ${pct(c.randomNumberHitRate,2)}보다 `+
+      `<span class="cooling-verdict-good">${testEdge.toFixed(2)}%p 높았습니다.</span>`;
+  }else{
+    verdict=
+      `최종시험 번호 적중률은 ${pct(c.test.numberHitRate,2)}로 무작위 ${pct(c.randomNumberHitRate,2)}보다 `+
+      `<span class="cooling-verdict-warn">${Math.abs(testEdge).toFixed(2)}%p 낮았습니다.</span>`;
+  }
+
+  document.getElementById("coolingBacktestComment").innerHTML=
+    `<b>검증 코멘트:</b> ${verdict} `+
+    `95% 신뢰구간은 ${pct(c.interval.low,2)}~${pct(c.interval.high,2)}, z=${c.zScore.toFixed(2)}입니다. `+
+    `무작위 기준이 신뢰구간 안에 있어 예측 우위가 확정된 것은 아닙니다. `+
+    `보너스 번호는 전 과정에서 제외했습니다.`;
+}
+
 function renderIdeas(){
   document.getElementById("ideaGrid").innerHTML=IDEAS.map(x=>`<div class="idea"><h3>${x[0]}</h3><p>${x[1]}</p><span class="tag">${x[2]}</span></div>`).join("");
 }
@@ -1949,7 +2449,7 @@ function switchView(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
   document.getElementById("pageTitle").textContent={
-    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"20조합 점수 예측",draws:"회차 탐색",ideas:"분석 아이디어"
+    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"20조합 점수 예측",cooling:"냉각 반등 10/50",draws:"회차 탐색",ideas:"분석 아이디어"
   }[id];
   if(window.matchMedia("(max-width:820px)").matches){
     window.scrollTo({top:0,behavior:"smooth"});
@@ -1968,6 +2468,8 @@ document.getElementById("compositeSignatureSearch").oninput=renderCompositeSigna
 document.getElementById("compositeExactSearch").oninput=renderCompositeExact;
 ["follow3Status","follow3Sort"].forEach(id=>document.getElementById(id).onchange=renderFollow3Table);
 document.getElementById("follow3Search").oninput=renderFollow3Table;
+["coolingFilter","coolingSort"].forEach(id=>document.getElementById(id).onchange=renderCoolingTable);
+document.getElementById("coolingSearch").oninput=renderCoolingTable;
 
 function updateMissingSelectColor(select){
   select.classList.toggle("missing-selected", select.value === "missing");
