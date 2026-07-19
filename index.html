@@ -683,13 +683,66 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   .all35-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+
+/* ===== Walk-forward backtest ===== */
+.backtest-panel{
+  background:linear-gradient(145deg,rgba(13,38,53,.98),rgba(8,27,41,.98));
+}
+.backtest-bars{
+  display:grid;
+  gap:8px;
+  margin:12px 0 14px;
+}
+.backtest-row{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr) 88px;
+  gap:10px;
+  align-items:center;
+  font-size:11px;
+}
+.backtest-label{
+  color:var(--muted);
+}
+.backtest-track{
+  height:9px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#071722;
+}
+.backtest-fill{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--good));
+}
+.backtest-value{
+  text-align:right;
+  color:var(--text);
+  font-weight:700;
+  white-space:nowrap;
+}
+.backtest-comment-strong{
+  color:#ffd27c;
+  font-weight:800;
+}
+.backtest-random{
+  color:var(--muted);
+}
+@media(max-width:820px){
+  .backtest-row{
+    grid-template-columns:58px minmax(0,1fr) 76px;
+    gap:7px;
+    font-size:9px;
+  }
+}
+
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">LOTTO PATTERN LAB</div>
-    <div class="version">v0.5.2 · 예측 회차 자동 표기</div>
+    <div class="version">v0.6 · 순차 백테스트</div>
     <nav class="nav">
       <button class="active" data-view="dashboard"><span class="nav-icon">▦</span><span class="nav-full">전체 현황</span><span class="nav-short">홈</span></button>
       <button data-view="ending"><span class="nav-icon">◉</span><span class="nav-full">개별 끝수</span><span class="nav-short">끝수</span></button>
@@ -875,6 +928,20 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
         <div class="notice" id="followPredictionNote"></div>
       </div>
 
+      <div class="panel backtest-panel">
+        <h2>과거 순차 검증</h2>
+        <div class="desc">
+          각 목표 회차를 예측할 때 그 직전 회차까지의 데이터만 사용합니다.
+          목표 회차 이후의 당첨번호는 계산에 넣지 않는 워크포워드 방식입니다.
+        </div>
+
+        <div class="cards" id="followBacktestKpis"></div>
+
+        <div class="backtest-bars" id="followBacktestBars"></div>
+
+        <div class="notice" id="followBacktestComment"></div>
+      </div>
+
       <div class="panel">
         <h2>예측번호 근거</h2>
         <div class="desc">각 번호가 어떤 최신 3수 조합의 후속 교집합에서 선택됐는지 보여줍니다.</div>
@@ -917,6 +984,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
         <h2>해석 주의</h2>
         <div class="notice">
           이 결과는 과거 회차의 조건부 반복을 정리한 탐색 패턴입니다.
+          과거 순차 검증 수치가 무작위 기준과 비슷하더라도 특정 미래 회차에서 같은 성과를 보장하지 않습니다.
           번호 출현 확률을 높이거나 당첨을 보장하지 않으며, 표본이 적은 조합은 우연의 영향이 큽니다.
           <span id="followTargetRule"></span>
         </div>
@@ -1138,6 +1206,147 @@ function chooseExact(arr,size){
   return out;
 }
 
+
+function follow3Key(triplet){
+  return triplet.join(",");
+}
+
+function hypergeomProbability(predictedCount,hitCount){
+  if(hitCount<0 || hitCount>Math.min(6,predictedCount))return 0;
+  if(predictedCount-hitCount>39)return 0;
+  return nCr(6,hitCount)*nCr(39,predictedCount-hitCount)/nCr(45,predictedCount);
+}
+
+function hypergeomAtLeast(predictedCount,minimumHits){
+  let total=0;
+  for(let hits=minimumHits;hits<=Math.min(6,predictedCount);hits++){
+    total+=hypergeomProbability(predictedCount,hits);
+  }
+  return total;
+}
+
+function analyzeFollow3Backtest(rows){
+  const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
+  const occurrences=new Map();
+  const evaluations=[];
+
+  function addSourceDraw(sourceIndex){
+    const source=ordered[sourceIndex];
+    const seven=[...new Set([...source.nums.map(Number),Number(source.bonus)])].sort((a,b)=>a-b);
+    chooseExact(seven,3).forEach(triplet=>{
+      const key=follow3Key(triplet);
+      if(!occurrences.has(key))occurrences.set(key,[]);
+      occurrences.get(key).push(sourceIndex);
+    });
+  }
+
+  for(let targetIndex=1;targetIndex<ordered.length;targetIndex++){
+    const referenceIndex=targetIndex-1;
+    const reference=ordered[referenceIndex];
+    const target=ordered[targetIndex];
+    const referenceSeven=[...new Set([...reference.nums.map(Number),Number(reference.bonus)])].sort((a,b)=>a-b);
+    const triplets=chooseExact(referenceSeven,3);
+
+    const candidateSupport=new Map();
+    const uniqueTransitions=new Set();
+
+    triplets.forEach(triplet=>{
+      const matches=occurrences.get(follow3Key(triplet))||[];
+      matches.forEach(sourceIndex=>uniqueTransitions.add(sourceIndex));
+
+      if(matches.length<2)return;
+
+      let common=new Set(ordered[matches[0]+1].nums.map(Number));
+      for(let i=1;i<matches.length && common.size;i++){
+        const nextSet=new Set(ordered[matches[i]+1].nums.map(Number));
+        common=new Set([...common].filter(number=>nextSet.has(number)));
+      }
+
+      common.forEach(number=>
+        candidateSupport.set(number,(candidateSupport.get(number)||0)+1)
+      );
+    });
+
+    const uniqueFollowFrequency=new Map();
+    uniqueTransitions.forEach(sourceIndex=>{
+      ordered[sourceIndex+1].nums.forEach(number=>
+        uniqueFollowFrequency.set(number,(uniqueFollowFrequency.get(number)||0)+1)
+      );
+    });
+
+    const candidatePool=[...candidateSupport.keys()].sort((a,b)=>
+      (candidateSupport.get(b)||0)-(candidateSupport.get(a)||0) ||
+      (uniqueFollowFrequency.get(b)||0)-(uniqueFollowFrequency.get(a)||0) ||
+      a-b
+    );
+
+    const prediction=candidatePool.slice(0,6).sort((a,b)=>a-b);
+    const actualSet=new Set(target.nums.map(Number));
+    const hits=prediction.filter(number=>actualSet.has(number));
+
+    evaluations.push({
+      referenceDraw:reference.draw,
+      targetDraw:target.draw,
+      predictedCount:prediction.length,
+      prediction,
+      hitCount:hits.length,
+      hits
+    });
+
+    // The reference draw becomes a searchable historical source only
+    // after its target draw has been evaluated.
+    addSourceDraw(referenceIndex);
+  }
+
+  const predicted=evaluations.filter(item=>item.predictedCount>0);
+  const fullSix=predicted.filter(item=>item.predictedCount===6);
+  const hitDistribution=[0,1,2,3,4,5,6].map(hitCount=>({
+    hitCount,
+    count:predicted.filter(item=>item.hitCount===hitCount).length
+  }));
+
+  const totalHits=predicted.reduce((sum,item)=>sum+item.hitCount,0);
+  const totalPredictedNumbers=predicted.reduce((sum,item)=>sum+item.predictedCount,0);
+
+  const atLeast=minimum=>
+    predicted.length
+      ? predicted.filter(item=>item.hitCount>=minimum).length/predicted.length
+      : 0;
+
+  const weightedRandomAtLeast=minimum=>
+    predicted.length
+      ? predicted.reduce((sum,item)=>sum+hypergeomAtLeast(item.predictedCount,minimum),0)/predicted.length
+      : 0;
+
+  const averageHits=predicted.length?totalHits/predicted.length:0;
+  const randomAverageHits=predicted.length
+    ? predicted.reduce((sum,item)=>sum+item.predictedCount*6/45,0)/predicted.length
+    : 0;
+
+  const numberHitRate=totalPredictedNumbers?totalHits/totalPredictedNumbers:0;
+  const randomNumberHitRate=6/45;
+
+  return {
+    totalTargets:evaluations.length,
+    predictionRounds:predicted.length,
+    noSignalRounds:evaluations.length-predicted.length,
+    fullSixRounds:fullSix.length,
+    hitDistribution,
+    atLeast1:atLeast(1),
+    atLeast2:atLeast(2),
+    atLeast3:atLeast(3),
+    randomAtLeast1:weightedRandomAtLeast(1),
+    randomAtLeast2:weightedRandomAtLeast(2),
+    randomAtLeast3:weightedRandomAtLeast(3),
+    averageHits,
+    randomAverageHits,
+    numberHitRate,
+    randomNumberHitRate,
+    totalHits,
+    totalPredictedNumbers
+  };
+}
+
 function analyzeFollow3(rows){
   const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
   const latestRow=ordered[ordered.length-1];
@@ -1288,7 +1497,8 @@ function analyze(rows){
   }).length;
   const composite=analyzeComposite(rows,latest);
   const follow3=analyzeFollow3(rows);
-  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3};
+  const follow3Backtest=analyzeFollow3Backtest(rows);
+  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest};
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
 function fmt(n,d=0){return n==null?"-":Number(n).toFixed(d);}
@@ -1477,6 +1687,51 @@ function renderCompositeDraws(pattern){
 }
 
 
+
+function pct(value){
+  return `${(value*100).toFixed(1)}%`;
+}
+
+function renderFollow3Backtest(){
+  const b=state.analysis.follow3Backtest;
+
+  document.getElementById("followBacktestKpis").innerHTML=[
+    ["예측 생성 회차",b.predictionRounds,`전체 ${b.totalTargets}회 · 무신호 ${b.noSignalRounds}회`],
+    ["1개 이상 적중",pct(b.atLeast1),`무작위 기준 ${pct(b.randomAtLeast1)}`],
+    ["2개 이상 적중",pct(b.atLeast2),`무작위 기준 ${pct(b.randomAtLeast2)}`],
+    ["3개 이상 적중",pct(b.atLeast3),`무작위 기준 ${pct(b.randomAtLeast3)}`],
+    ["번호 적중률",pct(b.numberHitRate),`무작위 기준 ${pct(b.randomNumberHitRate)}`]
+  ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
+
+  const maxCount=Math.max(1,...b.hitDistribution.map(item=>item.count));
+  document.getElementById("followBacktestBars").innerHTML=b.hitDistribution
+    .filter(item=>item.count>0)
+    .map(item=>`
+      <div class="backtest-row">
+        <div class="backtest-label">${item.hitCount}개 적중</div>
+        <div class="backtest-track"><span class="backtest-fill" style="width:${item.count/maxCount*100}%"></span></div>
+        <div class="backtest-value">${item.count}회</div>
+      </div>`).join("");
+
+  const edge=(b.numberHitRate-b.randomNumberHitRate)*100;
+  let verdict="";
+  if(edge>=1){
+    verdict=`무작위 기준보다 ${edge.toFixed(2)}%p 높았지만, 독립 검증 전에는 예측 우위로 단정하기 어렵습니다.`;
+  }else if(edge<=-1){
+    verdict=`무작위 기준보다 ${Math.abs(edge).toFixed(2)}%p 낮아, 과거 검증에서 예측 우위가 확인되지 않았습니다.`;
+  }else{
+    verdict=`무작위 기준과의 차이가 ${edge>=0?"+":""}${edge.toFixed(2)}%p로 매우 작아, 유의미한 예측 우위는 확인되지 않았습니다.`;
+  }
+
+  document.getElementById("followBacktestComment").innerHTML=
+    `<span class="backtest-comment-strong">검증 코멘트:</span> `+
+    `${b.predictionRounds}개 예측 회차에서 1개 이상 맞은 비율은 ${pct(b.atLeast1)}, `+
+    `2개 이상은 ${pct(b.atLeast2)}, 3개 이상은 ${pct(b.atLeast3)}였습니다. `+
+    `예측번호 한 개가 실제 본번호에 포함된 비율은 ${pct(b.numberHitRate)}이고, `+
+    `<span class="backtest-random">동일 개수의 번호를 무작위로 골랐을 때의 이론값은 ${pct(b.randomNumberHitRate)}</span>입니다. `+
+    `${verdict}`;
+}
+
 function renderFollow3(){
   const f=state.analysis.follow3;
   const targetLabel=`[${f.targetDraw}회차]`;
@@ -1516,6 +1771,8 @@ function renderFollow3(){
     ["완전 공통 조합",f.commonTriplets,"35개 전체 검색 결과"],
     ["예측 후보",f.candidatePool.length,"공통 후속 번호"]
   ].map(x=>`<div class="card"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join("");
+
+  renderFollow3Backtest();
 
   const prediction=f.prediction;
   document.getElementById("followPredictionBalls").innerHTML=prediction.length
