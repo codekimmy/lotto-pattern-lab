@@ -196,7 +196,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   .sidebar .brand,.sidebar .version,.sidebar .side-note{display:none}
   .nav{
     display:grid;
-    grid-template-columns:repeat(7,minmax(0,1fr));
+    grid-template-columns:repeat(8,minmax(0,1fr));
     gap:4px;
     overflow:visible;
   }
@@ -954,6 +954,149 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
   .cooling-segment-table{min-width:620px}
 }
 
+
+/* ===== Triple-hit focused candidate ===== */
+.triple-hero{
+  background:linear-gradient(145deg,rgba(37,31,55,.98),rgba(10,27,42,.98));
+}
+.triple-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+.triple-status{
+  flex:0 0 auto;
+  padding:6px 10px;
+  border:1px solid rgba(255,145,184,.52);
+  border-radius:999px;
+  background:rgba(255,145,184,.10);
+  color:#ff9fc0;
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.triple-flow{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:12px 0 14px;
+  padding:10px 12px;
+  border:1px dashed rgba(147,170,188,.36);
+  border-radius:10px;
+  background:rgba(7,23,34,.58);
+  color:var(--muted);
+  font-size:10px;
+}
+.triple-flow b{color:#ffd27c}
+.triple-prediction{
+  background:linear-gradient(145deg,rgba(48,39,62,.98),rgba(13,35,51,.98));
+}
+.triple-candidate-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+}
+.triple-candidate{
+  padding:10px 9px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel2);
+}
+.triple-candidate.selected{
+  border-color:rgba(255,207,112,.72);
+  background:rgba(255,207,112,.08);
+}
+.triple-candidate-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.triple-candidate .ball{width:30px;height:30px}
+.triple-candidate.selected .ball{
+  background:var(--accent2);
+  color:#241702;
+}
+.triple-candidate-score{
+  color:#ffd27c;
+  font-size:10px;
+  font-weight:800;
+}
+.triple-candidate-meta{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.45;
+}
+.triple-window-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.triple-window-card{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--panel2);
+}
+.triple-window-card.pass{
+  border-color:rgba(126,226,166,.62);
+  background:rgba(87,199,133,.07);
+}
+.triple-window-card.fail{
+  border-color:rgba(255,145,184,.52);
+}
+.triple-window-title{
+  color:var(--muted);
+  font-size:10px;
+}
+.triple-window-value{
+  margin:5px 0;
+  font-size:25px;
+  font-weight:900;
+}
+.triple-window-pass{color:#7ee2a6;font-weight:800}
+.triple-window-fail{color:#ff91b8;font-weight:800}
+.triple-window-sub{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.5;
+}
+.triple-history{
+  background:linear-gradient(145deg,rgba(14,37,52,.98),rgba(8,26,39,.98));
+}
+.triple-hit-card{
+  background:#10283b;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px;
+}
+.triple-hit-numbers{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:8px;
+}
+.triple-hit-numbers .ball.hit{
+  background:var(--accent2);
+  color:#241702;
+}
+@media(max-width:1050px){
+  .triple-candidate-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:820px){
+  .triple-heading{display:block}
+  .triple-status{display:inline-block;margin-top:7px}
+  .triple-flow{font-size:8.5px}
+  .triple-candidate-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .triple-window-grid{grid-template-columns:1fr}
+}
+@media(max-width:360px){
+  .triple-candidate-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -969,6 +1112,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
       <button data-view="composite"><span class="nav-icon">⌘</span><span class="nav-full">복합 끝수</span><span class="nav-short">복합</span></button>
       <button data-view="follow3"><span class="nav-icon">△</span><span class="nav-full">20조합 점수 예측</span><span class="nav-short">점수</span></button>
       <button data-view="cooling"><span class="nav-icon">↘</span><span class="nav-full">냉각 반등 10/50</span><span class="nav-short">냉각</span></button>
+      <button data-view="tripleHit"><span class="nav-icon">◎</span><span class="nav-full">3개 적중 특화</span><span class="nav-short">3적중</span></button>
       <button data-view="draws"><span class="nav-icon">≡</span><span class="nav-full">회차 탐색</span><span class="nav-short">회차</span></button>
       <button data-view="ideas"><span class="nav-icon">＋</span><span class="nav-full">분석 아이디어</span><span class="nav-short">아이디어</span></button>
     </nav>
@@ -1331,6 +1475,97 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
       </div>
     </section>
 
+
+    <section id="tripleHit" class="view">
+      <div class="panel triple-hero">
+        <div class="triple-heading">
+          <div>
+            <h2>3개 적중 특화 · 급랭 동반쌍</h2>
+            <div class="desc">
+              최근 5회에서 급격히 식은 번호를 먼저 고른 뒤, 최근 200회에서 함께 출현한 번호쌍의 결속력을 반영해
+              6개 조합을 만듭니다. 목표는 번호 한두 개 적중이 아니라 <b>3개 이상 적중 회차</b>입니다.
+              <span class="bonus-exclusion">보너스 번호는 전 과정에서 제외합니다.</span>
+            </div>
+          </div>
+          <span class="triple-status">단기 검증 후보</span>
+        </div>
+
+        <div class="triple-flow">
+          <span>직전 55회 출현률</span>
+          <b>−</b>
+          <span>최근 5회 출현률</span>
+          <b>→</b>
+          <span>급랭 후보 10개</span>
+          <b>→</b>
+          <span>최근 200회 동반쌍 PMI</span>
+          <b>→</b>
+          <span>최종 6개</span>
+        </div>
+
+        <div class="follow-latest">
+          <div>
+            <div class="follow-latest-title" id="tripleLatestTitle"></div>
+            <div class="mini">본번호 6개 · 보너스 제외 · 규칙 고정</div>
+          </div>
+          <div class="nums follow-latest-balls" id="tripleLatestBalls"></div>
+        </div>
+
+        <div class="cards" id="tripleKpis"></div>
+      </div>
+
+      <div class="panel triple-prediction">
+        <h2 id="triplePredictionTitle">예측 회차 계산 중</h2>
+        <div class="desc">
+          급랭 점수 상위 10개 안에서 개별 점수와 번호쌍 결속력을 함께 최대화한 한 조합입니다.
+        </div>
+        <div class="prediction-balls" id="triplePredictionBalls"></div>
+        <div class="notice" id="triplePredictionNote"></div>
+      </div>
+
+      <div class="panel">
+        <h2>급랭 후보 10개와 최종 선택</h2>
+        <div class="desc">
+          급랭 점수만으로 뽑은 후보군과 동반쌍 점수를 거쳐 최종 선택된 번호를 비교합니다.
+        </div>
+        <div class="triple-candidate-grid" id="tripleCandidateGrid"></div>
+      </div>
+
+      <div class="panel">
+        <h2>빠른 검증 · 3개 이상 적중</h2>
+        <div class="desc">
+          최근 30·50·60회를 순차 예측해 5등 이상에 해당하는 3개 이상 적중 횟수를 셉니다.
+          기준은 각각 3회·4회·5회입니다.
+        </div>
+        <div class="triple-window-grid" id="tripleWindowGrid"></div>
+        <div class="notice" id="tripleWindowComment"></div>
+      </div>
+
+      <div class="panel triple-history">
+        <h2>전체 순차 검증</h2>
+        <div class="desc">
+          201회차부터 매 회차 직전 데이터만 사용했습니다. 미래 회차를 점수 계산에 섞지 않습니다.
+        </div>
+        <div class="cards" id="tripleHistoryKpis"></div>
+        <div class="backtest-bars" id="tripleHistoryBars"></div>
+        <div class="notice" id="tripleHistoryComment"></div>
+      </div>
+
+      <div class="panel">
+        <h2>최근 3개 이상 적중 회차</h2>
+        <div class="desc">예측번호와 실제 본번호에서 일치한 번호를 함께 표시합니다.</div>
+        <div class="draws" id="tripleRecentHits"></div>
+      </div>
+
+      <div class="panel">
+        <h2>판정</h2>
+        <div class="notice">
+          최근 30·50·60회 기준을 모두 통과하면 <b>단기 검증 후보</b>로 유지합니다.
+          다만 여러 패턴을 탐색한 뒤 발견한 규칙이라, 과거 구간의 확률 수치만으로 예측력이 입증됐다고 보지는 않습니다.
+          앞으로 같은 규칙을 바꾸지 않고 신규 회차에서 3개 이상 적중 여부를 기록합니다.
+        </div>
+      </div>
+    </section>
+
     <section id="draws" class="view">
       <div class="panel">
         <h2>회차 탐색</h2>
@@ -1418,6 +1653,7 @@ let state = {
 };
 
 const IDEAS = [
+  ["3개 적중 특화","급랭 후보 10개와 최근 200회 동반쌍 결속력으로 6개 조합 선택","단기 검증"],
   ["냉각 반등 10/50","직전 40회 대비 최근 10회에서 출현이 줄어든 번호를 추적","검증 중"],
   ["20조합 점수 예측","후속률·표본 신뢰도·최근성·조합 지지를 합친 점수 모델","구현"],
   ["홀짝 패턴","0:6부터 6:0까지 구성, 빈도, 최근 공백","후속"],
@@ -1974,6 +2210,228 @@ function analyzeCoolingRebound(rows){
   };
 }
 
+
+const TRIPLE_RECENT_WINDOW=5;
+const TRIPLE_MID_WINDOW=55;
+const TRIPLE_PAIR_WINDOW=200;
+const TRIPLE_POOL_SIZE=10;
+const TRIPLE_PAIR_WEIGHT=.5;
+
+function tripleNumberCounts(rows){
+  const counts=Array(46).fill(0);
+  rows.forEach(row=>row.nums.forEach(number=>counts[number]++));
+  return counts;
+}
+
+function tripleCombinations(values,size){
+  const out=[];
+  function walk(start,picked){
+    if(picked.length===size){out.push([...picked]);return;}
+    for(let index=start;index<values.length;index++){
+      picked.push(values[index]);
+      walk(index+1,picked);
+      picked.pop();
+    }
+  }
+  walk(0,[]);
+  return out;
+}
+
+function tripleMean(values){
+  return values.length?values.reduce((sum,value)=>sum+value,0)/values.length:0;
+}
+
+function tripleStandardize(values){
+  const mean=tripleMean(values);
+  const variance=values.length
+    ?values.reduce((sum,value)=>sum+(value-mean)*(value-mean),0)/values.length
+    :0;
+  const deviation=Math.sqrt(variance)||1;
+  return values.map(value=>(value-mean)/deviation);
+}
+
+function triplePrediction(historyRows){
+  if(historyRows.length<TRIPLE_PAIR_WINDOW){
+    return {available:false,prediction:[],pool:[],reason:"최소 200개 회차가 필요합니다."};
+  }
+
+  const recent=historyRows.slice(-TRIPLE_RECENT_WINDOW);
+  const mid=historyRows.slice(-(TRIPLE_RECENT_WINDOW+TRIPLE_MID_WINDOW),-TRIPLE_RECENT_WINDOW);
+  const pairRows=historyRows.slice(-TRIPLE_PAIR_WINDOW);
+
+  const recentCounts=tripleNumberCounts(recent);
+  const midCounts=tripleNumberCounts(mid);
+  const pairFrequency=tripleNumberCounts(pairRows);
+
+  const cooling=Array.from({length:45},(_,index)=>{
+    const number=index+1;
+    const recentRate=recentCounts[number]/TRIPLE_RECENT_WINDOW;
+    const midRate=midCounts[number]/TRIPLE_MID_WINDOW;
+    return {
+      number,
+      recentCount:recentCounts[number],
+      midCount:midCounts[number],
+      recentRate,
+      midRate,
+      score:midRate-recentRate
+    };
+  }).sort((a,b)=>b.score-a.score||a.number-b.number);
+
+  const pool=cooling.slice(0,TRIPLE_POOL_SIZE);
+  const poolNumbers=pool.map(item=>item.number);
+  const individualZ=tripleStandardize(pool.map(item=>item.score));
+
+  const pairCounts=Array.from({length:46},()=>Array(46).fill(0));
+  pairRows.forEach(row=>{
+    for(let left=0;left<row.nums.length;left++){
+      for(let right=left+1;right<row.nums.length;right++){
+        const a=row.nums[left],b=row.nums[right];
+        pairCounts[a][b]++;
+        pairCounts[b][a]++;
+      }
+    }
+  });
+
+  const pairValues=[];
+  const pairPmi=Array.from({length:TRIPLE_POOL_SIZE},()=>Array(TRIPLE_POOL_SIZE).fill(0));
+  for(let left=0;left<TRIPLE_POOL_SIZE;left++){
+    for(let right=left+1;right<TRIPLE_POOL_SIZE;right++){
+      const a=poolNumbers[left],b=poolNumbers[right];
+      const value=Math.log(
+        ((pairCounts[a][b]+.5)*TRIPLE_PAIR_WINDOW)/
+        ((pairFrequency[a]+.5)*(pairFrequency[b]+.5))
+      );
+      pairPmi[left][right]=value;
+      pairPmi[right][left]=value;
+      pairValues.push(value);
+    }
+  }
+
+  const pairMean=tripleMean(pairValues);
+  const pairVariance=pairValues.length
+    ?pairValues.reduce((sum,value)=>sum+(value-pairMean)*(value-pairMean),0)/pairValues.length
+    :0;
+  const pairDeviation=Math.sqrt(pairVariance)||1;
+
+  const combinations=tripleCombinations(
+    Array.from({length:TRIPLE_POOL_SIZE},(_,index)=>index),
+    6
+  );
+
+  let best=null;
+  combinations.forEach(indices=>{
+    let individualScore=0;
+    let pairScore=0;
+
+    indices.forEach(index=>individualScore+=individualZ[index]);
+    for(let left=0;left<indices.length;left++){
+      for(let right=left+1;right<indices.length;right++){
+        pairScore+=(pairPmi[indices[left]][indices[right]]-pairMean)/pairDeviation;
+      }
+    }
+
+    const totalScore=individualScore+TRIPLE_PAIR_WEIGHT*pairScore;
+    if(!best||totalScore>best.totalScore){
+      best={indices,individualScore,pairScore,totalScore};
+    }
+  });
+
+  const selectedSet=new Set(best.indices);
+  const enrichedPool=pool.map((item,index)=>({
+    ...item,
+    selected:selectedSet.has(index),
+    individualZ:individualZ[index]
+  }));
+
+  return {
+    available:true,
+    prediction:best.indices.map(index=>poolNumbers[index]).sort((a,b)=>a-b),
+    pool:enrichedPool,
+    individualScore:best.individualScore,
+    pairScore:best.pairScore,
+    totalScore:best.totalScore
+  };
+}
+
+function tripleRandomAtLeastThree(){
+  let probability=0;
+  for(let hits=3;hits<=6;hits++){
+    probability+=nCr(6,hits)*nCr(39,6-hits)/nCr(45,6);
+  }
+  return probability;
+}
+
+function tripleBinomialTail(rounds,probability,minimum){
+  let total=0;
+  for(let count=minimum;count<=rounds;count++){
+    total+=nCr(rounds,count)*Math.pow(probability,count)*Math.pow(1-probability,rounds-count);
+  }
+  return total;
+}
+
+function tripleWindowSummary(evaluations,size,threshold){
+  const segment=evaluations.slice(-size);
+  const hit3=segment.filter(item=>item.hitCount>=3).length;
+  const hit4=segment.filter(item=>item.hitCount>=4).length;
+  return {
+    size,
+    threshold,
+    rounds:segment.length,
+    hit3,
+    hit4,
+    pass:segment.length===size&&hit3>=threshold,
+    probability:tripleBinomialTail(size,tripleRandomAtLeastThree(),hit3)
+  };
+}
+
+function analyzeTripleHit(rows){
+  const ordered=[...rows].sort((a,b)=>a.draw-b.draw);
+  const current=triplePrediction(ordered);
+  const evaluations=[];
+
+  for(let targetIndex=TRIPLE_PAIR_WINDOW;targetIndex<ordered.length;targetIndex++){
+    const prediction=triplePrediction(ordered.slice(0,targetIndex));
+    const actualSet=new Set(ordered[targetIndex].nums);
+    const hits=prediction.prediction.filter(number=>actualSet.has(number));
+
+    evaluations.push({
+      targetDraw:ordered[targetIndex].draw,
+      targetDate:ordered[targetIndex].date,
+      prediction:prediction.prediction,
+      actual:ordered[targetIndex].nums,
+      hits,
+      hitCount:hits.length
+    });
+  }
+
+  const randomRate=tripleRandomAtLeastThree();
+  const totalHit3=evaluations.filter(item=>item.hitCount>=3).length;
+  const totalHit4=evaluations.filter(item=>item.hitCount>=4).length;
+  const averageHits=evaluations.length
+    ?evaluations.reduce((sum,item)=>sum+item.hitCount,0)/evaluations.length
+    :0;
+
+  return {
+    latestRow:ordered[ordered.length-1],
+    targetDraw:Number(ordered[ordered.length-1].draw)+1,
+    current,
+    evaluations,
+    totalRounds:evaluations.length,
+    totalHit3,
+    totalHit4,
+    totalHit3Rate:evaluations.length?totalHit3/evaluations.length:0,
+    averageHits,
+    randomRate,
+    overallTail:tripleBinomialTail(evaluations.length,randomRate,totalHit3),
+    windows:[
+      tripleWindowSummary(evaluations,30,3),
+      tripleWindowSummary(evaluations,50,4),
+      tripleWindowSummary(evaluations,60,5)
+    ],
+    recentHits:evaluations.filter(item=>item.hitCount>=3).slice(-10).reverse()
+  };
+}
+
 function analyze(rows){
   const latest=Math.max(...rows.map(r=>Number(r.draw)));
   const digits={};
@@ -2028,7 +2486,8 @@ function analyze(rows){
   const follow3Backtest=analyzeFollow3Backtest(rows);
   const follow3=analyzeFollow3(rows,follow3Backtest);
   const cooling=analyzeCoolingRebound(rows);
-  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest,cooling};
+  const tripleHit=analyzeTripleHit(rows);
+  return {digits,totalPossible,totalObserved,totalMissing,totalOccurrences,repeatDraws,latest,composite,follow3,follow3Backtest,cooling,tripleHit};
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
 function fmt(n,d=0){return n==null?"-":Number(n).toFixed(d);}
@@ -2068,6 +2527,7 @@ function renderAll(){
   renderComposite();
   renderFollow3();
   renderCooling();
+  renderTripleHit();
   renderIdeas();
 }
 function fillSelects(){
@@ -2541,6 +3001,112 @@ function renderCoolingBacktest(){
     `보너스 번호는 전 과정에서 제외했습니다.`;
 }
 
+
+function renderTripleHit(){
+  const t=state.analysis.tripleHit;
+  const targetLabel=`[${t.targetDraw}회차]`;
+
+  document.getElementById("tripleLatestTitle").textContent=
+    `[${t.latestRow.draw}회차] · ${t.latestRow.date}`;
+  document.getElementById("tripleLatestBalls").innerHTML=
+    t.latestRow.nums.map(number=>`<span class="ball">${number}</span>`).join("");
+
+  document.getElementById("triplePredictionTitle").textContent=
+    `${targetLabel} 3개 적중 특화 예측번호`;
+  document.getElementById("triplePredictionBalls").innerHTML=
+    t.current.prediction.map(number=>`<span class="prediction-ball">${number}</span>`).join("");
+
+  const passed=t.windows.filter(window=>window.pass).length;
+  document.getElementById("tripleKpis").innerHTML=[
+    ["예측 대상",targetLabel,"최신 회차 + 1"],
+    ["급랭 후보",TRIPLE_POOL_SIZE,"최근 5회 vs 직전 55회"],
+    ["동반쌍 창",TRIPLE_PAIR_WINDOW+"회","PMI 결속력"],
+    ["빠른 검증",`${passed}/3 통과`,"30·50·60회"],
+    ["전체 3개+",t.totalHit3,`${pct(t.totalHit3Rate,2)} · 201회부터`]
+  ].map(item=>`<div class="card"><div class="label">${item[0]}</div><div class="value" style="font-size:${String(item[1]).length>13?17:25}px">${item[1]}</div><div class="sub">${item[2]}</div></div>`).join("");
+
+  document.getElementById("triplePredictionNote").innerHTML=
+    `예측번호는 <b>${t.current.prediction.join(" · ")}</b>입니다. `+
+    `급랭 후보 10개에서 동반출현 결속력이 높은 조합을 골랐습니다. `+
+    `보너스 번호는 제외하며, 아직 공식 예측기가 아니라 단기 검증 후보입니다.`;
+
+  document.getElementById("tripleCandidateGrid").innerHTML=
+    t.current.pool.map((item,index)=>`
+      <div class="triple-candidate ${item.selected?"selected":""}">
+        <div class="triple-candidate-head">
+          <span class="ball">${item.number}</span>
+          <span class="triple-candidate-score">${item.score>=0?"+":""}${item.score.toFixed(3)}</span>
+        </div>
+        <div class="triple-candidate-meta">
+          급랭 순위 ${index+1}<br>
+          직전 55회 ${item.midCount}회 · 최근 5회 ${item.recentCount}회<br>
+          ${item.selected?"최종 조합 선택":"후보군"}
+        </div>
+      </div>`).join("");
+
+  document.getElementById("tripleWindowGrid").innerHTML=
+    t.windows.map(window=>`
+      <div class="triple-window-card ${window.pass?"pass":"fail"}">
+        <div class="triple-window-title">최근 ${window.size}회</div>
+        <div class="triple-window-value">${window.hit3}회</div>
+        <div class="${window.pass?"triple-window-pass":"triple-window-fail"}">
+          ${window.pass?"기준 통과":"기준 미달"} · 목표 ${window.threshold}회
+        </div>
+        <div class="triple-window-sub">
+          4개 이상 ${window.hit4}회<br>
+          무작위가 이 이상 기록할 단순확률 ${(window.probability*100).toFixed(3)}%
+        </div>
+      </div>`).join("");
+
+  const allPass=t.windows.every(window=>window.pass);
+  document.getElementById("tripleWindowComment").innerHTML=
+    `<b>빠른 검증 판정:</b> `+
+    (allPass
+      ?`최근 30·50·60회 기준을 모두 통과했습니다. 현재 상태는 <span class="triple-window-pass">단기 검증 후보 유지</span>입니다.`
+      :`세 구간 중 일부가 기준에 미달해 <span class="triple-window-fail">채택 보류</span> 상태입니다.`)+
+    ` 여러 패턴을 탐색한 뒤 발견한 규칙이므로 표시된 무작위 확률은 탐색 보정 전 참고값입니다.`;
+
+  document.getElementById("tripleHistoryKpis").innerHTML=[
+    ["검증 회차",t.totalRounds,"201회차부터"],
+    ["3개 이상",t.totalHit3,pct(t.totalHit3Rate,2)],
+    ["4개 이상",t.totalHit4,"과거 순차검증"],
+    ["평균 적중",t.averageHits.toFixed(3),"회차당"],
+    ["무작위 3개+",pct(t.randomRate,2),"한 회차 이론값"]
+  ].map(item=>`<div class="card"><div class="label">${item[0]}</div><div class="value">${item[1]}</div><div class="sub">${item[2]}</div></div>`).join("");
+
+  const distribution=[0,1,2,3,4,5,6].map(hitCount=>({
+    hitCount,
+    count:t.evaluations.filter(item=>item.hitCount===hitCount).length
+  }));
+  const maxCount=Math.max(1,...distribution.map(item=>item.count));
+  document.getElementById("tripleHistoryBars").innerHTML=
+    distribution.filter(item=>item.count>0).map(item=>`
+      <div class="backtest-row">
+        <div class="backtest-label">${item.hitCount}개 적중</div>
+        <div class="backtest-track"><span class="backtest-fill" style="width:${item.count/maxCount*100}%"></span></div>
+        <div class="backtest-value">${item.count}회</div>
+      </div>`).join("");
+
+  document.getElementById("tripleHistoryComment").innerHTML=
+    `<b>전체 검증:</b> 3개 이상 적중률은 ${pct(t.totalHit3Rate,2)}, 무작위 이론값은 ${pct(t.randomRate,2)}입니다. `+
+    `전체 기간에서 이 이상 나올 단순 이항확률은 ${(t.overallTail*100).toFixed(2)}%입니다. `+
+    `다만 이 규칙은 여러 후보를 탐색한 뒤 선택했기 때문에 전체 기간 수치도 독립적인 확증으로 보기는 어렵습니다.`;
+
+  document.getElementById("tripleRecentHits").innerHTML=
+    t.recentHits.length
+      ?t.recentHits.map(item=>{
+        const hitSet=new Set(item.hits);
+        return `<div class="triple-hit-card">
+          <div><b>${item.targetDraw}회 · ${item.hitCount}개 적중</b></div>
+          <div class="mini">${item.targetDate} · 예측 ${item.prediction.join("·")}</div>
+          <div class="triple-hit-numbers">
+            ${item.actual.map(number=>`<span class="ball ${hitSet.has(number)?"hit":""}">${number}</span>`).join("")}
+          </div>
+        </div>`;
+      }).join("")
+      :'<div class="notice">3개 이상 적중 기록이 없습니다.</div>';
+}
+
 function renderIdeas(){
   document.getElementById("ideaGrid").innerHTML=IDEAS.map(x=>`<div class="idea"><h3>${x[0]}</h3><p>${x[1]}</p><span class="tag">${x[2]}</span></div>`).join("");
 }
@@ -2548,7 +3114,7 @@ function switchView(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
   document.getElementById("pageTitle").textContent={
-    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"20조합 점수 예측",cooling:"냉각 반등 10/50",draws:"회차 탐색",ideas:"분석 아이디어"
+    dashboard:"전체 현황",ending:"개별 끝수",composite:"복합 끝수",follow3:"20조합 점수 예측",cooling:"냉각 반등 10/50",tripleHit:"3개 적중 특화",draws:"회차 탐색",ideas:"분석 아이디어"
   }[id];
   if(window.matchMedia("(max-width:820px)").matches){
     window.scrollTo({top:0,behavior:"smooth"});
