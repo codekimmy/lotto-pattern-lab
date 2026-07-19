@@ -51,6 +51,56 @@ button,select,input{font:inherit}
 .topbar{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:22px}
 .title h1{margin:0 0 5px;font-size:28px}.title p{margin:0;color:var(--muted);font-size:13px}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
+.admin-tools-wrap{margin-top:16px}
+.admin-tools{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(145deg,rgba(10,25,36,.98),rgba(7,18,27,.98));
+  box-shadow:0 10px 30px rgba(0,0,0,.16);
+  overflow:hidden
+}
+.admin-tools summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px 18px;
+  user-select:none
+}
+.admin-tools summary::-webkit-details-marker{display:none}
+.admin-tools-title{
+  font-size:14px;
+  font-weight:800;
+  color:#f2f7fb
+}
+.admin-tools-sub{
+  color:var(--muted);
+  font-size:10px;
+  text-align:right
+}
+.admin-tools summary::after{
+  content:"펼치기";
+  flex:0 0 auto;
+  color:var(--accent);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2px
+}
+.admin-tools[open] summary::after{content:"접기"}
+.admin-tools-body{
+  padding:0 18px 18px;
+  border-top:1px solid rgba(35,67,90,.42)
+}
+.admin-actions{margin:14px 0 12px}
+.admin-meta{
+  display:grid;
+  gap:6px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.55
+}
 .btn{border:1px solid var(--line);background:var(--panel2);color:#fff;padding:10px 13px;border-radius:9px;cursor:pointer}
 .btn.primary{background:var(--accent);color:#06202a;border-color:transparent;font-weight:700}
 .view{display:none}.view.active{display:block}
@@ -107,7 +157,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
 .footer-note{flex:0 0 auto;color:var(--muted);font-size:10px;white-space:nowrap}
 .hidden{display:none!important}
 @media(max-width:1050px){.structure-grid{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(3,1fr)}.digit-grid{grid-template-columns:repeat(2,1fr)}.draws{grid-template-columns:repeat(2,1fr)}.idea-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;gap:5px;overflow:auto}.nav button{width:auto;white-space:nowrap}.side-note{display:none}.main{padding:18px 13px 40px}.topbar{align-items:flex-start;flex-direction:column}.cards{grid-template-columns:repeat(2,1fr)}.digit-grid,.draws,.idea-grid,.structure-grid{grid-template-columns:1fr}.footer-card{flex-wrap:wrap;gap:12px 16px;padding:17px}.footer-summary{order:3;flex-basis:100%;white-space:normal;overflow:visible;text-overflow:clip}.footer-link{margin-left:auto}.footer-note{flex-basis:100%}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;gap:5px;overflow:auto}.nav button{width:auto;white-space:nowrap}.side-note{display:none}.main{padding:18px 13px 40px}.topbar{align-items:flex-start;flex-direction:column}.cards{grid-template-columns:repeat(2,1fr)}.digit-grid,.draws,.idea-grid,.structure-grid{grid-template-columns:1fr}.footer-card{flex-wrap:wrap;gap:12px 16px;padding:17px}.footer-summary{order:3;flex-basis:100%;white-space:normal;overflow:visible;text-overflow:clip}.footer-link{margin-left:auto}.footer-note{flex-basis:100%}.admin-tools summary{display:grid;grid-template-columns:1fr;gap:5px;align-items:start}.admin-tools-sub{text-align:left}.admin-tools summary::after{justify-self:end}.admin-meta{font-size:10px}}
 
 .nav-icon{display:inline-block;margin-right:7px}
 .nav-short{display:none}
@@ -931,10 +981,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
         <h1 id="pageTitle">전체 현황</h1>
         <p id="metaText"></p>
       </div>
-      <div class="actions">
-        <label class="btn primary">CSV 불러오기<input id="csvFile" class="hidden" type="file" accept=".csv"></label>
-        <button class="btn" id="exportJson">분석 JSON 저장</button>
-      </div>
+
     </div>
 
     <section id="dashboard" class="view active">
@@ -1309,6 +1356,32 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#112f43}
           따라서 끝수 분석을 건드리지 않고 홀짝, 구간, 연속수, 이월수 같은 페이지를 차곡차곡 붙일 수 있습니다.
         </div>
       </div>
+    </section>
+
+
+    <section class="admin-tools-wrap" aria-label="관리자 실험 도구">
+      <details class="admin-tools">
+        <summary>
+          <span class="admin-tools-title">관리자·실험 도구</span>
+          <span class="admin-tools-sub">테스트용 기능 · 평상시엔 펼칠 필요 없어요</span>
+        </summary>
+        <div class="admin-tools-body">
+          <div class="notice">
+            이 영역은 일반 방문자용 메뉴가 아니라 <b>관리자·테스트용 도구</b>입니다.
+            Google Sheets 자동 동기화와는 별도로, 브라우저에서 임시 데이터를 시험하거나 현재 분석 결과를 JSON으로 저장할 때만 사용하면 됩니다.
+          </div>
+
+          <div class="actions admin-actions">
+            <label class="btn primary">CSV 불러오기<input id="csvFile" class="hidden" type="file" accept=".csv"></label>
+            <button class="btn" id="exportJson">분석 JSON 저장</button>
+          </div>
+
+          <div class="admin-meta">
+            <div><b>CSV 불러오기</b> · 현재 열린 브라우저 화면에서만 임시 적용됩니다. 새로고침하면 Google Sheets 기반 데이터로 돌아갑니다.</div>
+            <div><b>분석 JSON 저장</b> · 현재 화면의 분석 결과를 보관·비교·점검용으로 내려받습니다.</div>
+          </div>
+        </div>
+      </details>
     </section>
 
     <footer class="site-footer" aria-label="Ai365Lab">
