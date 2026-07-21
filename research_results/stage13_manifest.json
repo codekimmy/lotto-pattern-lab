@@ -1,0 +1,225 @@
+{
+  "project": "Ai365Lab · LOTTO PATTERN LAB",
+  "experiment": "새 기준 13차 신규 구간 사전등록 추적",
+  "model": "순수 3수 분산 T형",
+  "variant": {
+    "kind": "T",
+    "nb": 0.2,
+    "op": 0.5,
+    "ttop": 3,
+    "tsecond": 0
+  },
+  "switch_rule": "현재 시점에 20회 추적이 끝난 최근 4개 이동창의 3개+ 관측 합계 - 조건부 무작위 기대 합계가 0 이상이면 가동",
+  "input_window": 45,
+  "step": 5,
+  "tracking_horizon": 20,
+  "bonus_excluded": true,
+  "latest_observed_draw": 1233,
+  "registrations": [
+    {
+      "input_start": 1171,
+      "input_end": 1215,
+      "future_start": 1216,
+      "future_end": 1235,
+      "state": "휴식",
+      "health_score": -2.664280894544,
+      "selected_sets": [
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ],
+        [
+          3,
+          10,
+          16,
+          30,
+          35,
+          40
+        ],
+        [
+          6,
+          8,
+          20,
+          21,
+          27,
+          32
+        ]
+      ],
+      "record_hash": "575af0cdc78fdf32c0295f2ece62df4e138f6513126f0b8a1644400316366118"
+    },
+    {
+      "input_start": 1176,
+      "input_end": 1220,
+      "future_start": 1221,
+      "future_end": 1240,
+      "state": "휴식",
+      "health_score": -0.511503116766,
+      "selected_sets": [
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ],
+        [
+          3,
+          10,
+          16,
+          30,
+          35,
+          40
+        ],
+        [
+          6,
+          17,
+          22,
+          23,
+          31,
+          39
+        ]
+      ],
+      "record_hash": "0a974be469745392f8c8fd0918c0898b834d7cd3a1585823e0dfde090ed8a780"
+    },
+    {
+      "input_start": 1181,
+      "input_end": 1225,
+      "future_start": 1226,
+      "future_end": 1245,
+      "state": "가동",
+      "health_score": 0.34544695071,
+      "selected_sets": [
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          8,
+          18,
+          20,
+          22,
+          30,
+          43
+        ],
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ],
+        [
+          14,
+          15,
+          20,
+          21,
+          41,
+          45
+        ]
+      ],
+      "record_hash": "a30ba78c60f1d5edf79b0b41f0570806fd864db3b8aefdca3e89859792ca9271"
+    },
+    {
+      "input_start": 1186,
+      "input_end": 1230,
+      "future_start": 1231,
+      "future_end": 1250,
+      "state": "휴식",
+      "health_score": -0.027360066834,
+      "selected_sets": [
+        [
+          3,
+          13,
+          26,
+          30,
+          34,
+          42
+        ],
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          6,
+          8,
+          20,
+          21,
+          27,
+          32
+        ],
+        [
+          13,
+          14,
+          24,
+          25,
+          39,
+          44
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ]
+      ],
+      "record_hash": "0db2cce5081acc7c0b80084ce606bd81dc4cd5a3198127681f8d460f84c24b4a"
+    }
+  ],
+  "manifest_sha256": "2d5de5075923936180d4516c307105af1466ea5eb9f2e126903323f61784e66b"
+}

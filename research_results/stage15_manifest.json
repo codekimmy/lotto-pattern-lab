@@ -1,0 +1,390 @@
+{
+  "project": "Ai365Lab · LOTTO PATTERN LAB",
+  "experiment": "새 기준 15차 동일후보풀 그림자 결승전",
+  "created_before_draw": 1234,
+  "input_range": "1181~1225",
+  "candidate_pool_size": 35,
+  "benchmark_range": "1234~1245",
+  "bonus_excluded": true,
+  "official_model_unchanged": true,
+  "ranking_rule": [
+    "최고 적중 등급",
+    "5개 이상 티켓 수",
+    "4개 이상 티켓 수",
+    "4개 이상 고유 당첨회차",
+    "3개 이상 티켓 수"
+  ],
+  "methods": [
+    {
+      "code": "OFFICIAL_T5",
+      "name": "공식 순수 3수",
+      "status": "공식",
+      "variant": {
+        "kind": "T",
+        "nb": 0.2,
+        "op": 0.5,
+        "ttop": 3,
+        "tsecond": 0
+      },
+      "candidate_indexes": [
+        7,
+        34,
+        22,
+        23,
+        2
+      ],
+      "sets": [
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          8,
+          18,
+          20,
+          22,
+          30,
+          43
+        ],
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ],
+        [
+          14,
+          15,
+          20,
+          21,
+          41,
+          45
+        ]
+      ],
+      "metrics": {
+        "unique_numbers": 28,
+        "coverage_rate": 0.6222222222222222,
+        "average_overlap": 0.3,
+        "maximum_overlap": 1,
+        "max_exposure": 3,
+        "max_exposure_numbers": [
+          20
+        ],
+        "sum_mean": 148.0,
+        "odd_positions": 14,
+        "low_positions": 14
+      }
+    },
+    {
+      "code": "SHADOW_MIX",
+      "name": "혼합 2T+3Q",
+      "status": "그림자",
+      "variant": {
+        "kind": "mixed",
+        "tcount": 2,
+        "ttop": 3,
+        "qtop": 1,
+        "tsecond": 0,
+        "qsecond": 0,
+        "nb": 0.2,
+        "op": 0.5
+      },
+      "candidate_indexes": [
+        7,
+        34,
+        22,
+        3,
+        2
+      ],
+      "sets": [
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          8,
+          18,
+          20,
+          22,
+          30,
+          43
+        ],
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          6,
+          16,
+          17,
+          25,
+          33,
+          42
+        ],
+        [
+          14,
+          15,
+          20,
+          21,
+          41,
+          45
+        ]
+      ],
+      "metrics": {
+        "unique_numbers": 29,
+        "coverage_rate": 0.6444444444444445,
+        "average_overlap": 0.1,
+        "maximum_overlap": 1,
+        "max_exposure": 2,
+        "max_exposure_numbers": [
+          20
+        ],
+        "sum_mean": 142.6,
+        "odd_positions": 15,
+        "low_positions": 15
+      }
+    },
+    {
+      "code": "SHADOW_Q5",
+      "name": "순수 4수",
+      "status": "그림자",
+      "variant": {
+        "kind": "Q",
+        "qtop": 1,
+        "qsecond": 0,
+        "nb": 0.2,
+        "op": 0.5
+      },
+      "candidate_indexes": [
+        7,
+        4,
+        2,
+        20,
+        23
+      ],
+      "sets": [
+        [
+          1,
+          9,
+          19,
+          28,
+          29,
+          37
+        ],
+        [
+          5,
+          8,
+          22,
+          25,
+          27,
+          31
+        ],
+        [
+          14,
+          15,
+          20,
+          21,
+          41,
+          45
+        ],
+        [
+          3,
+          10,
+          16,
+          30,
+          35,
+          40
+        ],
+        [
+          7,
+          20,
+          23,
+          36,
+          38,
+          42
+        ]
+      ],
+      "metrics": {
+        "unique_numbers": 29,
+        "coverage_rate": 0.6444444444444445,
+        "average_overlap": 0.1,
+        "maximum_overlap": 1,
+        "max_exposure": 2,
+        "max_exposure_numbers": [
+          20
+        ],
+        "sum_mean": 139.4,
+        "odd_positions": 17,
+        "low_positions": 15
+      }
+    },
+    {
+      "code": "SHADOW_DIV",
+      "name": "번호 다양성",
+      "status": "그림자",
+      "variant": {
+        "kind": "div"
+      },
+      "candidate_indexes": [
+        0,
+        1,
+        10,
+        12,
+        17
+      ],
+      "sets": [
+        [
+          1,
+          10,
+          19,
+          27,
+          33,
+          41
+        ],
+        [
+          4,
+          13,
+          14,
+          25,
+          39,
+          44
+        ],
+        [
+          3,
+          9,
+          12,
+          23,
+          26,
+          38
+        ],
+        [
+          7,
+          16,
+          29,
+          30,
+          34,
+          37
+        ],
+        [
+          6,
+          8,
+          20,
+          21,
+          27,
+          32
+        ]
+      ],
+      "metrics": {
+        "unique_numbers": 29,
+        "coverage_rate": 0.6444444444444445,
+        "average_overlap": 0.1,
+        "maximum_overlap": 1,
+        "max_exposure": 2,
+        "max_exposure_numbers": [
+          27
+        ],
+        "sum_mean": 129.6,
+        "odd_positions": 16,
+        "low_positions": 15
+      }
+    },
+    {
+      "code": "CONTROL_RANDOM",
+      "name": "고정 무작위",
+      "status": "대조",
+      "variant": {
+        "kind": "fixed_random",
+        "seed_sha256": "c87a986aa45e06d8c39a0c48f1324ff446fb7142b0c4542a39f5a95cbdf5fd7d"
+      },
+      "candidate_indexes": [
+        11,
+        13,
+        22,
+        26,
+        33
+      ],
+      "sets": [
+        [
+          3,
+          13,
+          16,
+          20,
+          36,
+          45
+        ],
+        [
+          1,
+          24,
+          26,
+          33,
+          36,
+          40
+        ],
+        [
+          2,
+          24,
+          26,
+          27,
+          31,
+          44
+        ],
+        [
+          10,
+          11,
+          25,
+          27,
+          35,
+          39
+        ],
+        [
+          9,
+          17,
+          18,
+          28,
+          34,
+          45
+        ]
+      ],
+      "metrics": {
+        "unique_numbers": 25,
+        "coverage_rate": 0.5555555555555556,
+        "average_overlap": 0.5,
+        "maximum_overlap": 2,
+        "max_exposure": 2,
+        "max_exposure_numbers": [
+          24,
+          26,
+          27,
+          36,
+          45
+        ],
+        "sum_mean": 149.0,
+        "odd_positions": 15,
+        "low_positions": 11
+      }
+    }
+  ],
+  "registration_sha256": "39b25ddbbf0f9a2855898bf6027a6ba887688192152d6c53470a6d490108412f"
+}
