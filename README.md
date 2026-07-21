@@ -103,3 +103,15 @@ do not trigger a separate Pages branch build.
 - 1~15차 검증 흐름, 현재 주력·그림자·대조 모델의 포커스와 역할, 고정 운영 규칙, 공식 5세트를 정리했습니다.
 - `research_results/` 폴더에 단계별 XLSX, 사전등록 Manifest, 현재 공식 세트 CSV를 포함했습니다.
 - 모든 모델 설명과 채점은 본번호 6개 기준이며 보너스 번호는 제외합니다.
+
+
+## 추적 검증 히스토리 데이터
+
+`research_results/portfolio_history.json`이 팝업 장부의 데이터 원장입니다.
+
+- `currentPortfolioId`: 메인 화면에 표시할 최신 가동 포트폴리오 ID
+- `portfolios`: 가동·완결·휴식 판정 기록. 세트가 있는 이전 항목은 자동으로 `과거 세트` 탭으로 이동
+- `shadowContest.models`: 그림자 결승전 모델과 고정 5세트
+- `supplementalDraws`: 기본 로또 CSV보다 최신인 본번호 임시 보충
+
+새 가동 포트폴리오를 `portfolios`에 추가하고 `currentPortfolioId`만 바꾸면 탭, 세트 카드, 회차별 누적 채점 행이 자동 생성됩니다. 보너스 번호는 넣지 않습니다.
