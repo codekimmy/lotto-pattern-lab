@@ -4,10 +4,10 @@
   "sheet_id": "1w1AZshic7KGnbb0lqjfg_aUx5F9RzGBtJykFJuaP-lM",
   "gid": "0",
   "validation": "passed",
-  "row_count": 1233,
+  "row_count": 1234,
   "first_draw": 1,
-  "latest_draw": 1233,
-  "latest_date": "2026-07-18",
-  "synced_at_kst": "2026-07-26T16:45:21+09:00",
-  "sha256": "14973de0bd47eaf710ff67e652dd73be902882422a495be9fecaeb9c855827cb"
+  "latest_draw": 1234,
+  "latest_date": "2026-07-25",
+  "synced_at_kst": "2026-07-27T13:04:41+09:00",
+  "sha256": "54cde8412361b260a356a6953f89368c7baf1ebc9fe82089b23308e2d747988d"
 }
